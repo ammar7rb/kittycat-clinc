@@ -26,13 +26,15 @@ export const translations = {
     "common.loading": "جاري التحميل...",
 
     // Home
-    "home.hero.title": "رعاية متخصصة لقطتك بكل حب واحتراف",
+    "home.hero.titleLead": "رعاية متخصصة لقطتك",
+    "home.hero.titleAccent": "بكل حب واحتراف",
     "home.hero.subtitle": "أول عيادة بيطرية في الإمارات متخصصة حصريًا في القطط — فريق طبي خبير، أحدث التقنيات، وبيئة آمنة تشبه المنزل.",
     "home.services.title": "خدماتنا الطبية",
     "home.services.subtitle": "كل ما تحتاجه قطتك تحت سقف واحد",
     "home.offers.title": "عروض حصرية",
     "home.offers.subtitle": "وفّر على رعاية قطتك مع باقاتنا المميزة",
-    "home.why.title": "لماذا Kitty Cat Clinic؟",
+    "home.why.titleLead": "لماذا",
+    "home.why.titleAccent": "Kitty Cat Clinic؟",
     "home.why.subtitle": "تخصص دقيق يصنع الفارق",
     "home.why.feature1.title": "تخصص حصري في القطط",
     "home.why.feature1.desc": "كل طبيب، كل أداة، كل إجراء مصمم خصيصًا لاحتياجات القطط.",
@@ -42,7 +44,10 @@ export const translations = {
     "home.why.feature3.desc": "أطباء بيطريون بشهادات دولية وخبرة سنوات في طب القطط.",
     "home.why.feature4.title": "ثلاثة فروع قريبة منك",
     "home.why.feature4.desc": "الرقام، الصنب، الرحبة — نخدمك أينما كنت في الإمارات.",
-    "home.branches.title": "فروعنا",
+    "home.branches.titleLead": "فروعنا",
+    "home.branches.titleAccent": "الثلاثة",
+    "home.badge.why": "تخصص يصنع الفارق",
+    "home.badge.branches": "قريبون منك",
     "home.branches.subtitle": "اختر الفرع الأقرب إليك",
 
     // Services page
