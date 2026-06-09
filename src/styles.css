@@ -125,27 +125,62 @@
 }
 
 .dark {
-  --background: oklch(0.18 0.02 200);
-  --foreground: oklch(0.97 0.005 180);
-  --card: oklch(0.22 0.02 200);
-  --card-foreground: oklch(0.97 0.005 180);
-  --popover: oklch(0.22 0.02 200);
-  --popover-foreground: oklch(0.97 0.005 180);
-  --primary: oklch(0.7 0.1 188);
-  --primary-foreground: oklch(0.15 0.02 200);
-  --primary-glow: oklch(0.78 0.1 188);
-  --secondary: oklch(0.78 0.14 55);
-  --secondary-foreground: oklch(0.15 0.02 50);
-  --secondary-glow: oklch(0.85 0.12 60);
-  --muted: oklch(0.28 0.02 200);
-  --muted-foreground: oklch(0.7 0.02 200);
-  --accent: oklch(0.3 0.04 190);
-  --accent-foreground: oklch(0.97 0.005 180);
-  --destructive: oklch(0.7 0.1 188);
-  --destructive-foreground: oklch(0.15 0.02 200);
-  --border: oklch(1 0 0 / 12%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.7 0.1 188);
+  /* Deep cool surfaces */
+  --background: oklch(0.16 0.025 220);
+  --foreground: oklch(0.98 0.005 180);
+
+  --card: oklch(0.22 0.03 220);
+  --card-foreground: oklch(0.98 0.005 180);
+  --popover: oklch(0.22 0.03 220);
+  --popover-foreground: oklch(0.98 0.005 180);
+
+  /* Primary teal — brighter for dark bg legibility */
+  --primary: oklch(0.78 0.12 188);
+  --primary-foreground: oklch(0.14 0.02 220);
+  --primary-glow: oklch(0.86 0.1 188);
+
+  /* Secondary orange — keep warm, slightly lighter */
+  --secondary: oklch(0.78 0.15 55);
+  --secondary-foreground: oklch(0.16 0.02 50);
+  --secondary-glow: oklch(0.86 0.12 60);
+
+  --muted: oklch(0.26 0.025 220);
+  --muted-foreground: oklch(0.78 0.02 200);
+  --accent: oklch(0.3 0.04 200);
+  --accent-foreground: oklch(0.98 0.005 180);
+
+  --destructive: oklch(0.78 0.12 188);
+  --destructive-foreground: oklch(0.14 0.02 220);
+
+  --border: oklch(1 0 0 / 14%);
+  --input: oklch(1 0 0 / 16%);
+  --ring: oklch(0.78 0.12 188);
+
+  --whatsapp: oklch(0.72 0.17 145);
+  --whatsapp-foreground: oklch(0.14 0.02 145);
+
+  --sidebar: oklch(0.18 0.025 220);
+  --sidebar-foreground: oklch(0.98 0.005 180);
+  --sidebar-primary: oklch(0.78 0.12 188);
+  --sidebar-primary-foreground: oklch(0.14 0.02 220);
+  --sidebar-accent: oklch(0.3 0.04 200);
+  --sidebar-accent-foreground: oklch(0.98 0.005 180);
+  --sidebar-border: oklch(1 0 0 / 14%);
+  --sidebar-ring: oklch(0.78 0.12 188);
+
+  /* Dark-leaning gradients (hero stays dark, with teal/orange glow) */
+  --gradient-primary: linear-gradient(135deg, oklch(0.32 0.06 200), oklch(0.42 0.08 195));
+  --gradient-secondary: linear-gradient(135deg, oklch(0.55 0.14 55), oklch(0.68 0.13 60));
+  --gradient-hero: linear-gradient(
+    135deg,
+    oklch(0.14 0.02 220) 0%,
+    oklch(0.2 0.05 210) 45%,
+    oklch(0.28 0.08 200) 100%
+  );
+
+  --shadow-soft: 0 4px 20px -4px oklch(0 0 0 / 50%);
+  --shadow-elegant: 0 10px 40px -10px oklch(0 0 0 / 65%);
+  --shadow-glow: 0 0 40px color-mix(in oklab, var(--primary-glow) 25%, transparent);
 }
 
 @layer base {
