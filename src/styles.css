@@ -117,7 +117,12 @@
 
   --gradient-primary: linear-gradient(135deg, var(--primary), var(--primary-glow));
   --gradient-secondary: linear-gradient(135deg, var(--secondary), var(--secondary-glow));
-  --gradient-hero: linear-gradient(135deg, var(--primary) 0%, var(--primary-glow) 50%, var(--secondary-glow) 100%);
+  --gradient-hero: linear-gradient(
+    135deg,
+    oklch(0.32 0.06 200) 0%,
+    oklch(0.42 0.08 195) 45%,
+    oklch(0.52 0.09 190) 100%
+  );
 
   --shadow-soft: 0 4px 20px -4px color-mix(in oklab, var(--primary) 15%, transparent);
   --shadow-elegant: 0 10px 40px -10px color-mix(in oklab, var(--primary) 25%, transparent);
