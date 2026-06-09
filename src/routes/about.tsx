@@ -21,6 +21,9 @@ export const Route = createFileRoute("/about")({
         content: "قصتنا، رؤيتنا، ومهمتنا في تقديم رعاية متخصصة للقطط.",
       },
     ],
+    links: [
+      { rel: "canonical", href: "/about" },
+    ],
   }),
   component: AboutPage,
 });

@@ -22,6 +22,9 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "Kitty Cat Clinic" },
       { property: "og:description", content: "رعاية متخصصة لقطتك بكل حب واحتراف." },
     ],
+    links: [
+      { rel: "canonical", href: "/" },
+    ],
   }),
   component: HomePage,
 });

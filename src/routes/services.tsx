@@ -23,6 +23,9 @@ export const Route = createFileRoute("/services")({
         content: "رعاية بيطرية متكاملة لكل مراحل حياة قطتك.",
       },
     ],
+    links: [
+      { rel: "canonical", href: "/services" },
+    ],
   }),
   component: ServicesPage,
 });
