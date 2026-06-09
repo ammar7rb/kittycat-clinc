@@ -22,6 +22,9 @@ export const Route = createFileRoute("/contact")({
         content: "ثلاثة فروع — تواصل واتساب مباشر مع الفرع الأقرب لك.",
       },
     ],
+    links: [
+      { rel: "canonical", href: "/contact" },
+    ],
   }),
   component: ContactPage,
 });
