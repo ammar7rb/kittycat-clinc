@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Menu, X, Globe, MessageCircle } from "lucide-react";
+import { Menu, X, Globe, MessageCircle, Sun, Moon } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
+import { useTheme } from "@/lib/theme/ThemeProvider";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useBranches } from "@/lib/queries";
@@ -9,6 +10,7 @@ import { buildWhatsAppUrl } from "@/lib/whatsapp";
 
 export function Header() {
   const { t, toggleLang, lang } = useLanguage();
+  const { theme, toggleTheme } = useTheme();
   const [open, setOpen] = useState(false);
   const { data: branches } = useBranches();
   const firstWa = branches?.[0]?.whatsapp;
@@ -52,6 +54,16 @@ export function Header() {
 
         {/* Actions */}
         <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleTheme}
+            aria-label={theme === "dark" ? "Switch to light" : "Switch to dark"}
+            title={theme === "dark" ? "Light" : "Dark"}
+          >
+            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </Button>
+
           <Button
             variant="ghost"
             size="sm"
