@@ -172,6 +172,90 @@ function HomePage() {
         </div>
       </section>
 
+      {/* ============ SERVICES — teal-tinted base + alternating tones ============ */}
+      <section
+        className="relative overflow-hidden py-16 md:py-24"
+        style={{
+          background:
+            "linear-gradient(180deg, color-mix(in oklab, var(--primary) 6%, var(--background)) 0%, var(--background) 100%)",
+        }}
+      >
+        <div className="pointer-events-none absolute -top-24 left-1/4 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
+        <div className="pointer-events-none absolute bottom-0 right-1/4 h-72 w-72 rounded-full bg-secondary/10 blur-3xl" />
+
+        <div className="container mx-auto px-4">
+          <SectionHeading
+            badge={
+              <>
+                <Stethoscope className="h-3 w-3" />
+                {t("home.services.title")}
+              </>
+            }
+            badgeTone="primary"
+            titleLead={t("home.services.title")}
+            subtitle={t("home.services.subtitle")}
+            accentTone="primary"
+          />
+
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {services?.map((s, i) => (
+              <ServiceCard
+                key={s.id}
+                service={s}
+                tone={i % 2 === 0 ? "primary" : "secondary"}
+                whatsapp={firstWa}
+              />
+            ))}
+          </div>
+
+          <div className="mt-10 text-center">
+            <Button asChild variant="outline" size="lg">
+              <a href="/services">
+                {t("common.viewAll")}
+                <ArrowLeft className={`h-4 w-4 ms-2 ${lang === "en" ? "rotate-180" : ""}`} />
+              </a>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ OFFERS — soft orange band ============ */}
+      {offers && offers.length > 0 && (
+        <section
+          className="relative overflow-hidden py-16 md:py-24"
+          style={{
+            background:
+              "linear-gradient(180deg, color-mix(in oklab, var(--secondary) 10%, var(--background)) 0%, color-mix(in oklab, var(--secondary) 4%, var(--background)) 100%)",
+          }}
+        >
+          <div className="pointer-events-none absolute top-10 left-10 h-64 w-64 rounded-full bg-secondary/20 blur-3xl" />
+          <div className="pointer-events-none absolute bottom-10 right-10 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
+
+          <div className="container mx-auto px-4">
+            <SectionHeading
+              badge={
+                <>
+                  <Gift className="h-3 w-3" />
+                  {t("home.offers.title")}
+                </>
+              }
+              badgeTone="secondary"
+              titleLead={t("home.offers.title")}
+              subtitle={t("home.offers.subtitle")}
+              accentTone="secondary"
+            />
+
+            <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {offers.map((o) => (
+                <OfferCard key={o.id} offer={o} whatsapp={firstWa} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+
+
       {/* ============ Two-tone divider band ============ */}
       <div
         aria-hidden
