@@ -1,10 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { MessageCircle, Sparkles, Heart, ShieldCheck, MapPin, Phone, ArrowLeft, Cat } from "lucide-react";
+import { MessageCircle, Sparkles, Heart, ShieldCheck, MapPin, Phone, ArrowLeft, Cat, Gift, Stethoscope } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
+import { SectionHeading } from "@/components/site/SectionHeading";
+import { ServiceCard } from "@/components/site/ServiceCard";
+import { OfferCard } from "@/components/site/OfferCard";
 import { useLanguage, useLocalized } from "@/lib/i18n/LanguageProvider";
-import { useBranches } from "@/lib/queries";
+import { useBranches, useServices, useOffers } from "@/lib/queries";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { Button } from "@/components/ui/button";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -26,6 +30,8 @@ function HomePage() {
   const { t, lang } = useLanguage();
   const pick = useLocalized();
   const { data: branches } = useBranches();
+  const { data: services } = useServices(6);
+  const { data: offers } = useOffers();
   const firstWa = branches?.[0]?.whatsapp;
 
   // Alternate icon palettes (teal / orange / teal / orange) for a balanced mix
