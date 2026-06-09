@@ -53,14 +53,9 @@ function HomePage() {
               {t("brand.tagline")}
             </div>
 
-            <h1 className="mt-6 text-4xl font-extrabold leading-tight tracking-tight md:text-6xl">
+            <h1 className="mt-6 text-4xl font-extrabold leading-tight tracking-tight text-white md:text-6xl">
               <span className="block">{t("home.hero.titleLead")}</span>
-              <span
-                className="mt-2 block bg-gradient-to-r from-secondary-glow via-secondary to-secondary-glow bg-clip-text text-transparent"
-                style={{ filter: "drop-shadow(0 4px 24px color-mix(in oklab, var(--secondary) 40%, transparent))" }}
-              >
-                {t("home.hero.titleAccent")}
-              </span>
+              <span className="mt-2 block">{t("home.hero.titleAccent")}</span>
             </h1>
 
             <p className="mx-auto mt-5 max-w-2xl text-base/relaxed text-white/90 md:text-lg">
