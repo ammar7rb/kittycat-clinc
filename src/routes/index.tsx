@@ -3,7 +3,6 @@ import { MessageCircle, Sparkles, Heart, ShieldCheck, MapPin, Phone, ArrowLeft, 
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { SectionHeading } from "@/components/site/SectionHeading";
 import { ServiceCard } from "@/components/site/ServiceCard";
-import { OfferCard } from "@/components/site/OfferCard";
 import { FeaturedOfferBanner } from "@/components/site/FeaturedOfferBanner";
 import { useLanguage, useLocalized } from "@/lib/i18n/LanguageProvider";
 import { useBranches, useServices, useOffers } from "@/lib/queries";
