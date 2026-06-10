@@ -15,7 +15,7 @@ export function OfferCard({ offer, whatsapp }: Props) {
 
   return (
     <article
-      className="group relative flex flex-col overflow-hidden rounded-2xl p-[1.5px] transition-transform hover:-translate-y-1"
+      className="reveal reveal-up group relative flex flex-col overflow-hidden rounded-2xl p-[1.5px] transition-transform hover:-translate-y-1"
       style={{ background: "var(--gradient-secondary)" }}
     >
       <div className="flex flex-1 flex-col rounded-[14px] bg-card p-6">

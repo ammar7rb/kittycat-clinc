@@ -65,7 +65,8 @@ function AboutPage() {
             return (
               <article
                 key={i}
-                className="relative overflow-hidden rounded-2xl border bg-card p-7"
+                data-reveal-delay={i * 100}
+                className="reveal reveal-up relative overflow-hidden rounded-2xl border bg-card p-7"
                 style={{
                   borderColor: isOrange
                     ? "color-mix(in oklab, var(--secondary) 25%, var(--border))"
@@ -116,7 +117,8 @@ function AboutPage() {
               return (
                 <div
                   key={key}
-                  className="group rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-elegant)]"
+                  data-reveal-delay={i * 80}
+                  className="reveal reveal-up group rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-elegant)]"
                 >
                   <div
                     className="flex h-12 w-12 items-center justify-center rounded-xl text-white shadow-[var(--shadow-soft)]"
@@ -155,10 +157,11 @@ function AboutPage() {
             titleAccent={t("home.branches.titleAccent")}
           />
           <ul className="mt-10 grid gap-4 md:grid-cols-3">
-            {branches.map((b) => (
+            {branches.map((b, i) => (
               <li
                 key={b.id}
-                className="flex items-start gap-3 rounded-2xl border border-border bg-card p-5"
+                data-reveal-delay={i * 100}
+                className="reveal reveal-up flex items-start gap-3 rounded-2xl border border-border bg-card p-5"
               >
                 <div
                   className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-white"

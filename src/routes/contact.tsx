@@ -69,7 +69,8 @@ function ContactPage() {
             return (
               <article
                 key={b.id}
-                className="relative flex flex-col overflow-hidden rounded-2xl border bg-card p-6"
+                data-reveal-delay={i * 110}
+                className="reveal reveal-up relative flex flex-col overflow-hidden rounded-2xl border bg-card p-6"
                 style={{
                   borderColor: isOrange
                     ? "color-mix(in oklab, var(--secondary) 25%, var(--border))"

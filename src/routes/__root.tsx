@@ -15,6 +15,7 @@ import { LanguageProvider } from "../lib/i18n/LanguageProvider";
 import { ThemeProvider } from "../lib/theme/ThemeProvider";
 import { Toaster } from "../components/ui/sonner";
 import { SiteHeadEffects } from "../components/site/SiteHeadEffects";
+import { ScrollReveal } from "../components/site/ScrollReveal";
 
 function NotFoundComponent() {
   return (
@@ -127,6 +128,7 @@ function RootComponent() {
       <ThemeProvider>
         <LanguageProvider>
           <SiteHeadEffects />
+          <ScrollReveal />
           <Outlet />
           <Toaster />
         </LanguageProvider>
