@@ -65,7 +65,8 @@ function AboutPage() {
             return (
               <article
                 key={i}
-                className="relative overflow-hidden rounded-2xl border bg-card p-7"
+                data-reveal-delay={i * 100}
+                className="reveal reveal-up relative overflow-hidden rounded-2xl border bg-card p-7"
                 style={{
                   borderColor: isOrange
                     ? "color-mix(in oklab, var(--secondary) 25%, var(--border))"
