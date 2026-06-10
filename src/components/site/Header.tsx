@@ -5,7 +5,7 @@ import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { useTheme } from "@/lib/theme/ThemeProvider";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { useBranches } from "@/lib/queries";
+import { useBranches, useSettings } from "@/lib/queries";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 
 export function Header() {
@@ -13,7 +13,10 @@ export function Header() {
   const { theme, toggleTheme } = useTheme();
   const [open, setOpen] = useState(false);
   const { data: branches } = useBranches();
-  const firstWa = branches?.[0]?.whatsapp;
+  const { data: settings } = useSettings();
+  const waNumber = settings?.whatsapp || branches?.[0]?.whatsapp || "";
+  const logoUrl = settings?.logo_url || "";
+
 
   const nav = [
     { to: "/", label: t("nav.home") },
@@ -27,9 +30,18 @@ export function Header() {
       <div className="container mx-auto flex h-16 items-center justify-between gap-4 px-4">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary-glow text-primary-foreground shadow-[var(--shadow-soft)]">
-            <span className="text-lg font-extrabold">K</span>
-          </div>
+          {logoUrl ? (
+            <img
+              src={logoUrl}
+              alt={t("brand.name")}
+              className="h-10 w-10 rounded-xl object-cover shadow-[var(--shadow-soft)]"
+            />
+          ) : (
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary-glow text-primary-foreground shadow-[var(--shadow-soft)]">
+              <span className="text-lg font-extrabold">K</span>
+            </div>
+          )}
+
           <div className="hidden sm:block leading-tight">
             <div className="text-sm font-extrabold tracking-tight text-foreground">
               {t("brand.name")}
