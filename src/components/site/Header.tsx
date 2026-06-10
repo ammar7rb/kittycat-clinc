@@ -87,14 +87,14 @@ export function Header() {
             {t("lang.toggle")}
           </Button>
 
-          {firstWa && (
+          {waNumber && (
             <Button
               asChild
               size="sm"
               className="hidden md:inline-flex bg-gradient-to-r from-primary to-primary-glow text-primary-foreground shadow-[var(--shadow-soft)] hover:opacity-95"
             >
               <a
-                href={buildWhatsAppUrl(firstWa, lang === "ar"
+                href={buildWhatsAppUrl(waNumber, lang === "ar"
                   ? "السلام عليكم، أود الحجز في Kitty Cat Clinic"
                   : "Hello, I'd like to book at Kitty Cat Clinic")}
                 target="_blank"
