@@ -130,15 +130,39 @@ function ContentAdminPage() {
     );
   }, [rows, search]);
 
-  const grouped = useMemo(() => {
-    const map = new Map<string, ContentRow[]>();
-    for (const r of filtered) {
-      const g = r.group_name?.trim() || "عام";
-      if (!map.has(g)) map.set(g, []);
-      map.get(g)!.push(r);
-    }
-    return Array.from(map.entries());
-  }, [filtered]);
+  const groups = useMemo(() => {
+    const set = new Set<string>();
+    for (const r of rows) set.add(r.group_name?.trim() || "عام");
+    return Array.from(set).sort();
+  }, [rows]);
+
+  const [activeGroup, setActiveGroup] = useState<string>("");
+  useEffect(() => {
+    if (!activeGroup && groups.length) setActiveGroup(groups[0]);
+    else if (activeGroup && !groups.includes(activeGroup) && groups.length)
+      setActiveGroup(groups[0]);
+  }, [groups, activeGroup]);
+
+  const visibleRows = useMemo(
+    () =>
+      filtered.filter(
+        (r) => (r.group_name?.trim() || "عام") === activeGroup,
+      ),
+    [filtered, activeGroup],
+  );
+
+  const groupLabels: Record<string, string> = {
+    general: "عام",
+    navigation: "قائمة التنقل",
+    home: "الصفحة الرئيسية",
+    about: "من نحن",
+    contact: "تواصل معنا",
+    footer: "الفوتر",
+    services: "الخدمات",
+    offers: "العروض",
+    branches: "الفروع",
+  };
+  const labelFor = (g: string) => groupLabels[g] ?? g;
 
   return (
     <div className="space-y-6 p-6">
@@ -146,7 +170,7 @@ function ContentAdminPage() {
         <div>
           <h1 className="text-2xl font-bold">محتوى الصفحات</h1>
           <p className="text-sm text-muted-foreground">
-            عدّل أي نص يظهر على الموقع من مكان واحد
+            اختر الصفحة من الأعلى لتعديل نصوصها
           </p>
         </div>
         <Button onClick={() => setCreating(true)}>
@@ -154,87 +178,109 @@ function ContentAdminPage() {
         </Button>
       </div>
 
-      <div className="relative max-w-md">
-        <Search className="absolute end-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input
-          placeholder="بحث بالمفتاح أو النص..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="pe-10"
-        />
-      </div>
-
       {isLoading ? (
         <p className="text-muted-foreground">جاري التحميل...</p>
-      ) : grouped.length === 0 ? (
+      ) : groups.length === 0 ? (
         <Card className="p-8 text-center text-muted-foreground">
           لا توجد نصوص بعد. ابدأ بإضافة أول نص.
         </Card>
       ) : (
-        <div className="space-y-6">
-          {grouped.map(([group, items]) => (
-            <div key={group}>
-              <h2 className="mb-3 text-sm font-semibold text-muted-foreground">
-                {group} <span className="opacity-60">({items.length})</span>
-              </h2>
-              <div className="space-y-2">
-                {items.map((r) => (
-                  <Card key={r.id} className="p-4">
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex-1 min-w-0 space-y-2">
-                        <code className="text-xs bg-muted px-2 py-1 rounded">
-                          {r.key}
-                        </code>
-                        <div className="grid gap-2 md:grid-cols-2">
-                          <div>
-                            <p className="text-xs text-muted-foreground mb-1">
-                              عربي
-                            </p>
-                            <p className="text-sm whitespace-pre-wrap break-words">
-                              {r.value_ar || (
-                                <span className="text-muted-foreground italic">
-                                  —
-                                </span>
-                              )}
-                            </p>
-                          </div>
-                          <div dir="ltr">
-                            <p className="text-xs text-muted-foreground mb-1">
-                              English
-                            </p>
-                            <p className="text-sm whitespace-pre-wrap break-words">
-                              {r.value_en || (
-                                <span className="text-muted-foreground italic">
-                                  —
-                                </span>
-                              )}
-                            </p>
-                          </div>
+        <>
+          <div className="flex flex-wrap gap-2 border-b pb-3">
+            {groups.map((g) => {
+              const count = rows.filter(
+                (r) => (r.group_name?.trim() || "عام") === g,
+              ).length;
+              const active = g === activeGroup;
+              return (
+                <button
+                  key={g}
+                  onClick={() => setActiveGroup(g)}
+                  className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                    active
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted hover:bg-muted/70 text-foreground"
+                  }`}
+                >
+                  {labelFor(g)}
+                  <span className="ms-2 opacity-70">({count})</span>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="relative max-w-md">
+            <Search className="absolute end-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="بحث داخل الصفحة..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pe-10"
+            />
+          </div>
+
+          {visibleRows.length === 0 ? (
+            <Card className="p-8 text-center text-muted-foreground">
+              لا توجد نصوص مطابقة في هذه الصفحة.
+            </Card>
+          ) : (
+            <div className="space-y-2">
+              {visibleRows.map((r) => (
+                <Card key={r.id} className="p-4">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex-1 min-w-0 space-y-2">
+                      <code className="text-xs bg-muted px-2 py-1 rounded">
+                        {r.key}
+                      </code>
+                      <div className="grid gap-2 md:grid-cols-2">
+                        <div>
+                          <p className="text-xs text-muted-foreground mb-1">
+                            عربي
+                          </p>
+                          <p className="text-sm whitespace-pre-wrap break-words">
+                            {r.value_ar || (
+                              <span className="text-muted-foreground italic">
+                                —
+                              </span>
+                            )}
+                          </p>
+                        </div>
+                        <div dir="ltr">
+                          <p className="text-xs text-muted-foreground mb-1">
+                            English
+                          </p>
+                          <p className="text-sm whitespace-pre-wrap break-words">
+                            {r.value_en || (
+                              <span className="text-muted-foreground italic">
+                                —
+                              </span>
+                            )}
+                          </p>
                         </div>
                       </div>
-                      <div className="flex gap-1 shrink-0">
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          onClick={() => setEditing(r)}
-                        >
-                          <Pencil className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          onClick={() => setConfirmDelete(r)}
-                        >
-                          <Trash2 className="h-4 w-4 text-destructive" />
-                        </Button>
-                      </div>
                     </div>
-                  </Card>
-                ))}
-              </div>
+                    <div className="flex gap-1 shrink-0">
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        onClick={() => setEditing(r)}
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        onClick={() => setConfirmDelete(r)}
+                      >
+                        <Trash2 className="h-4 w-4 text-destructive" />
+                      </Button>
+                    </div>
+                  </div>
+                </Card>
+              ))}
             </div>
-          ))}
-        </div>
+          )}
+        </>
       )}
 
       <CreateDialog
