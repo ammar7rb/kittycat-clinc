@@ -14,6 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { LanguageProvider } from "../lib/i18n/LanguageProvider";
 import { ThemeProvider } from "../lib/theme/ThemeProvider";
 import { Toaster } from "../components/ui/sonner";
+import { SiteHeadEffects } from "../components/site/SiteHeadEffects";
 
 function NotFoundComponent() {
   return (
@@ -125,6 +126,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <LanguageProvider>
+          <SiteHeadEffects />
           <Outlet />
           <Toaster />
         </LanguageProvider>
