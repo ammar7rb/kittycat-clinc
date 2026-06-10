@@ -340,16 +340,15 @@ function ServiceFormDialog({
                 onChange={(e) => setForm({ ...form, icon: e.target.value })}
               />
             </Field>
-            <Field label="رابط الصورة">
-              <Input
-                dir="ltr"
-                placeholder="https://..."
+            <Field label="صورة الخدمة">
+              <ImageUploadField
                 value={form.image_url ?? ""}
-                onChange={(e) =>
-                  setForm({ ...form, image_url: e.target.value })
-                }
+                onChange={(url) => setForm({ ...form, image_url: url })}
+                recommended="600 × 600 (مربعة)"
+                aspect="square"
               />
             </Field>
+
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">

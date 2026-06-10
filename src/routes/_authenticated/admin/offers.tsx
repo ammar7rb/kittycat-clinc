@@ -317,21 +317,15 @@ function OfferFormDialog({
             </Field>
           </div>
 
-          <Field label="رابط صورة العرض (كامل العرض)">
-            <Input
-              dir="ltr"
-              placeholder="https://..."
+          <Field label="صورة العرض">
+            <ImageUploadField
               value={form.image_url ?? ""}
-              onChange={(e) => setForm({ ...form, image_url: e.target.value })}
+              onChange={(url) => setForm({ ...form, image_url: url })}
+              recommended="1200 × 630 (عريضة)"
+              aspect="wide"
             />
-            {form.image_url && (
-              <img
-                src={form.image_url}
-                alt=""
-                className="mt-2 h-32 w-full rounded-md object-cover"
-              />
-            )}
           </Field>
+
 
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label="تاريخ البداية">
