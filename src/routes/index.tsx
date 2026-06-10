@@ -223,18 +223,9 @@ function HomePage() {
         </div>
       </section>
 
-      {/* ============ OFFERS — soft orange band ============ */}
+      {/* ============ OFFERS — full-width banners with countdown ============ */}
       {offers && offers.length > 0 && (
-        <section
-          className="relative overflow-hidden py-16 md:py-24"
-          style={{
-            background:
-              "linear-gradient(180deg, color-mix(in oklab, var(--secondary) 10%, var(--background)) 0%, color-mix(in oklab, var(--secondary) 4%, var(--background)) 100%)",
-          }}
-        >
-          <div className="pointer-events-none absolute top-10 left-10 h-64 w-64 rounded-full bg-secondary/20 blur-3xl" />
-          <div className="pointer-events-none absolute bottom-10 right-10 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
-
+        <section className="relative py-16 md:py-24">
           <div className="container mx-auto px-4">
             <SectionHeading
               badge={
@@ -248,12 +239,12 @@ function HomePage() {
               subtitle={t("home.offers.subtitle")}
               accentTone="secondary"
             />
+          </div>
 
-            <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {offers.map((o) => (
-                <OfferCard key={o.id} offer={o} whatsapp={firstWa} />
-              ))}
-            </div>
+          <div className="mt-12 flex flex-col gap-10">
+            {offers.map((o) => (
+              <FeaturedOfferBanner key={o.id} offer={o} whatsapp={firstWa} />
+            ))}
           </div>
         </section>
       )}
