@@ -56,7 +56,7 @@ function HomePage() {
         <div className="pointer-events-none absolute -bottom-32 -left-20 -z-10 h-80 w-80 rounded-full bg-secondary-glow/30 blur-3xl" />
 
         <div className="container mx-auto px-4 py-20 md:py-28">
-          <div className="mx-auto max-w-3xl text-center text-primary-foreground">
+          <div className="reveal reveal-blur mx-auto max-w-3xl text-center text-primary-foreground">
             <div className="inline-flex items-center gap-2 rounded-full border border-secondary/40 bg-secondary/15 px-4 py-1.5 text-xs font-semibold text-secondary-glow backdrop-blur">
               <Sparkles className="h-3.5 w-3.5" />
               {t("brand.tagline")}
@@ -131,12 +131,13 @@ function HomePage() {
           </div>
 
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {features.map(({ icon: Icon, key, tone }) => {
+            {features.map(({ icon: Icon, key, tone }, idx) => {
               const isOrange = tone === "secondary";
               return (
                 <div
                   key={key}
-                  className="group relative overflow-hidden rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-elegant)]"
+                  data-reveal-delay={idx * 100}
+                  className="reveal reveal-up group relative overflow-hidden rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-elegant)]"
                   style={{
                     borderColor: isOrange
                       ? "color-mix(in oklab, var(--secondary) 25%, var(--border))"
@@ -294,7 +295,8 @@ function HomePage() {
               return (
                 <div
                   key={b.id}
-                  className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-elegant)]"
+                  data-reveal-delay={i * 120}
+                  className="reveal reveal-up group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-elegant)]"
                 >
                   <div
                     aria-hidden
