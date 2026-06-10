@@ -31,7 +31,7 @@ export function SectionHeading({
       : "from-primary via-primary-glow to-primary";
 
   return (
-    <div className={cn("mx-auto max-w-2xl text-center", className)}>
+    <div className={cn("reveal reveal-up mx-auto max-w-2xl text-center", className)}>
       {badge && (
         <div
           className={cn(

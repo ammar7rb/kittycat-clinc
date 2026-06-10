@@ -18,7 +18,7 @@ export function PageHero({ badge, title, subtitle }: Props) {
       <div className="pointer-events-none absolute -bottom-24 -left-20 -z-10 h-80 w-80 rounded-full bg-primary-glow/25 blur-3xl" />
 
       <div className="container mx-auto px-4 py-16 md:py-24">
-        <div className="mx-auto max-w-3xl text-center">
+        <div className="reveal reveal-blur mx-auto max-w-3xl text-center">
           {badge && (
             <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-semibold text-white backdrop-blur">
               {badge}
