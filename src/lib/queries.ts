@@ -91,3 +91,71 @@ export function useOffers() {
     },
   });
 }
+
+export type SiteSettings = {
+  logo_url: string;
+  favicon_url: string;
+  phone: string;
+  whatsapp: string;
+  email: string;
+  address_ar: string;
+  address_en: string;
+  working_hours_ar: string;
+  working_hours_en: string;
+  facebook: string;
+  instagram: string;
+  tiktok: string;
+  youtube: string;
+  twitter: string;
+};
+
+const SETTINGS_MAP: Record<string, { field: keyof SiteSettings; lang?: "ar" | "en" }> = {
+  "settings.logo_url": { field: "logo_url" },
+  "settings.favicon_url": { field: "favicon_url" },
+  "settings.phone": { field: "phone" },
+  "settings.whatsapp": { field: "whatsapp" },
+  "settings.email": { field: "email" },
+  "settings.address": { field: "address_ar", lang: "ar" },
+  "settings.working_hours": { field: "working_hours_ar", lang: "ar" },
+  "settings.social.facebook": { field: "facebook" },
+  "settings.social.instagram": { field: "instagram" },
+  "settings.social.tiktok": { field: "tiktok" },
+  "settings.social.youtube": { field: "youtube" },
+  "settings.social.twitter": { field: "twitter" },
+};
+
+export function useSettings() {
+  return useQuery({
+    queryKey: ["settings"],
+    staleTime: 60_000,
+    queryFn: async (): Promise<SiteSettings> => {
+      const empty: SiteSettings = {
+        logo_url: "", favicon_url: "", phone: "", whatsapp: "", email: "",
+        address_ar: "", address_en: "", working_hours_ar: "", working_hours_en: "",
+        facebook: "", instagram: "", tiktok: "", youtube: "", twitter: "",
+      };
+      const { data, error } = await supabase
+        .from("website_content")
+        .select("key, value_ar, value_en")
+        .eq("group_name", "settings");
+      if (error) throw error;
+      const out = { ...empty };
+      for (const row of data ?? []) {
+        const map = SETTINGS_MAP[row.key];
+        if (!map) continue;
+        // For bilingual fields, store both
+        if (row.key === "settings.address") {
+          out.address_ar = row.value_ar ?? "";
+          out.address_en = row.value_en ?? "";
+        } else if (row.key === "settings.working_hours") {
+          out.working_hours_ar = row.value_ar ?? "";
+          out.working_hours_en = row.value_en ?? "";
+        } else {
+          (out as Record<string, string>)[map.field] = row.value_ar ?? "";
+        }
+      }
+      return out;
+    },
+  });
+}
+
