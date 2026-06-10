@@ -53,7 +53,7 @@ export function FeaturedOfferBanner({ offer, whatsapp }: Props) {
   ];
 
   return (
-    <article className="relative w-full overflow-hidden">
+    <article className="reveal reveal-up relative w-full overflow-hidden">
       {/* Full-width image */}
       <div className="relative h-[420px] w-full md:h-[520px]">
         {offer.image_url ? (

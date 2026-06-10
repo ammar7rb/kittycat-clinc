@@ -59,7 +59,8 @@ export function ServiceCard({ service, tone = "primary", whatsapp, index = 0 }: 
 
   return (
     <article
-      className="group relative flex h-full flex-col overflow-hidden rounded-[2rem] border border-border bg-card p-8 shadow-[0_20px_50px_rgba(0,0,0,0.04)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[var(--shadow-elegant)]"
+      className="reveal reveal-up group relative flex h-full flex-col overflow-hidden rounded-[2rem] border border-border bg-card p-8 shadow-[0_20px_50px_rgba(0,0,0,0.04)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[var(--shadow-elegant)]"
+      data-reveal-delay={typeof index === "number" ? index * 90 : undefined}
     >
       {/* Top gradient stripe */}
       <div
