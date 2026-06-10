@@ -207,6 +207,7 @@ function HomePage() {
                 service={s}
                 tone={i % 2 === 0 ? "primary" : "secondary"}
                 whatsapp={firstWa}
+                index={i}
               />
             ))}
           </div>
