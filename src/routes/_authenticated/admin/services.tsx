@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { ImageUploadField } from "@/components/admin/ImageUploadField";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -340,16 +341,15 @@ function ServiceFormDialog({
                 onChange={(e) => setForm({ ...form, icon: e.target.value })}
               />
             </Field>
-            <Field label="رابط الصورة">
-              <Input
-                dir="ltr"
-                placeholder="https://..."
+            <Field label="صورة الخدمة">
+              <ImageUploadField
                 value={form.image_url ?? ""}
-                onChange={(e) =>
-                  setForm({ ...form, image_url: e.target.value })
-                }
+                onChange={(url) => setForm({ ...form, image_url: url })}
+                recommended="600 × 600 (مربعة)"
+                aspect="square"
               />
             </Field>
+
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
