@@ -20,6 +20,7 @@ import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authentic
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedAdminServicesRouteImport } from './routes/_authenticated/admin/services'
 import { Route as AuthenticatedAdminOffersRouteImport } from './routes/_authenticated/admin/offers'
+import { Route as AuthenticatedAdminBranchesRouteImport } from './routes/_authenticated/admin/branches'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -77,6 +78,12 @@ const AuthenticatedAdminOffersRoute =
     path: '/offers',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
+const AuthenticatedAdminBranchesRoute =
+  AuthenticatedAdminBranchesRouteImport.update({
+    id: '/branches',
+    path: '/branches',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByFullPath {
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
+  '/admin/branches': typeof AuthenticatedAdminBranchesRoute
   '/admin/offers': typeof AuthenticatedAdminOffersRoute
   '/admin/services': typeof AuthenticatedAdminServicesRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
@@ -97,6 +105,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin/branches': typeof AuthenticatedAdminBranchesRoute
   '/admin/offers': typeof AuthenticatedAdminOffersRoute
   '/admin/services': typeof AuthenticatedAdminServicesRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
@@ -111,6 +120,7 @@ export interface FileRoutesById {
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
+  '/_authenticated/admin/branches': typeof AuthenticatedAdminBranchesRoute
   '/_authenticated/admin/offers': typeof AuthenticatedAdminOffersRoute
   '/_authenticated/admin/services': typeof AuthenticatedAdminServicesRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
@@ -125,6 +135,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/sitemap.xml'
     | '/admin'
+    | '/admin/branches'
     | '/admin/offers'
     | '/admin/services'
     | '/admin/'
@@ -136,6 +147,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/services'
     | '/sitemap.xml'
+    | '/admin/branches'
     | '/admin/offers'
     | '/admin/services'
     | '/admin'
@@ -149,6 +161,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/sitemap.xml'
     | '/_authenticated/admin'
+    | '/_authenticated/admin/branches'
     | '/_authenticated/admin/offers'
     | '/_authenticated/admin/services'
     | '/_authenticated/admin/'
@@ -243,10 +256,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminOffersRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
+    '/_authenticated/admin/branches': {
+      id: '/_authenticated/admin/branches'
+      path: '/branches'
+      fullPath: '/admin/branches'
+      preLoaderRoute: typeof AuthenticatedAdminBranchesRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
   }
 }
 
 interface AuthenticatedAdminRouteRouteChildren {
+  AuthenticatedAdminBranchesRoute: typeof AuthenticatedAdminBranchesRoute
   AuthenticatedAdminOffersRoute: typeof AuthenticatedAdminOffersRoute
   AuthenticatedAdminServicesRoute: typeof AuthenticatedAdminServicesRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
@@ -254,6 +275,7 @@ interface AuthenticatedAdminRouteRouteChildren {
 
 const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren =
   {
+    AuthenticatedAdminBranchesRoute: AuthenticatedAdminBranchesRoute,
     AuthenticatedAdminOffersRoute: AuthenticatedAdminOffersRoute,
     AuthenticatedAdminServicesRoute: AuthenticatedAdminServicesRoute,
     AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
