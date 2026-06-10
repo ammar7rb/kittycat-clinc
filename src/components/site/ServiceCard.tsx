@@ -8,13 +8,12 @@ import {
   Heart,
   ShieldCheck,
   Cat,
+  MessageCircle,
   type LucideIcon,
 } from "lucide-react";
 import { ServiceRow } from "@/lib/queries";
 import { useLanguage, useLocalized } from "@/lib/i18n/LanguageProvider";
-import { Button } from "@/components/ui/button";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
-import { MessageCircle } from "lucide-react";
 
 const ICONS: Record<string, LucideIcon> = {
   Stethoscope,
@@ -28,65 +27,111 @@ const ICONS: Record<string, LucideIcon> = {
   Cat,
 };
 
+const CATEGORIES: Record<string, string> = {
+  Stethoscope: "CLINIC",
+  Syringe: "SAFETY",
+  Sparkles: "DENTAL",
+  Scissors: "SURGERY",
+  Activity: "IMAGING",
+  Home: "BOARDING",
+  Heart: "NUTRITION",
+  ShieldCheck: "PREVENT",
+  Cat: "BEHAVIOR",
+};
+
 type Props = {
   service: ServiceRow;
   tone?: "primary" | "secondary";
   whatsapp?: string | null;
+  index?: number;
 };
 
-export function ServiceCard({ service, tone = "primary", whatsapp }: Props) {
+export function ServiceCard({ service, tone = "primary", whatsapp, index = 0 }: Props) {
   const pick = useLocalized();
   const { t } = useLanguage();
   const Icon = (service.icon && ICONS[service.icon]) || Stethoscope;
   const isOrange = tone === "secondary";
+  const number = String(index + 1).padStart(2, "0");
+  const category = (service.icon && CATEGORIES[service.icon]) || "CLINIC";
+
+  const accent = isOrange ? "var(--secondary)" : "var(--primary)";
+  const gradient = isOrange ? "var(--gradient-secondary)" : "var(--gradient-primary)";
 
   return (
     <article
-      className="group relative flex flex-col overflow-hidden rounded-2xl border bg-card p-6 transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-elegant)]"
-      style={{
-        borderColor: isOrange
-          ? "color-mix(in oklab, var(--secondary) 25%, var(--border))"
-          : "color-mix(in oklab, var(--primary) 25%, var(--border))",
-      }}
+      className="group relative flex h-full flex-col overflow-hidden rounded-[2rem] border border-border bg-card p-8 shadow-[0_20px_50px_rgba(0,0,0,0.04)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[var(--shadow-elegant)]"
     >
+      {/* Top gradient stripe */}
       <div
         aria-hidden
-        className="absolute inset-x-0 top-0 h-1 opacity-70 transition-opacity group-hover:opacity-100"
-        style={{
-          background: isOrange ? "var(--gradient-secondary)" : "var(--gradient-primary)",
-        }}
+        className="absolute inset-x-0 top-0 h-1.5"
+        style={{ background: gradient }}
       />
-      <div
-        className="flex h-12 w-12 items-center justify-center rounded-xl text-white shadow-[var(--shadow-soft)]"
-        style={{
-          background: isOrange ? "var(--gradient-secondary)" : "var(--gradient-primary)",
-        }}
-      >
-        <Icon className="h-6 w-6" />
+
+      {/* Icon + number row */}
+      <div className="mb-8 flex items-center justify-between">
+        <div
+          className="flex h-16 w-16 items-center justify-center rounded-2xl transition-all duration-500 group-hover:scale-110"
+          style={{
+            background: `color-mix(in oklab, ${accent} 12%, transparent)`,
+            color: accent,
+          }}
+        >
+          <Icon className="h-8 w-8" />
+        </div>
+        <div className="text-end opacity-30 select-none" dir="ltr">
+          <span className="block text-[10px] font-bold uppercase tracking-widest text-muted-foreground font-sans">
+            {category}
+          </span>
+          <span className="block text-lg font-black leading-none text-foreground font-sans">
+            {number}
+          </span>
+        </div>
       </div>
-      <h3 className="mt-4 text-lg font-bold text-foreground">{pick(service, "name")}</h3>
+
+      {/* Titles */}
+      <h3 className="text-2xl font-extrabold leading-tight text-foreground">
+        {pick(service, "name")}
+      </h3>
+      <p
+        className="mt-2 text-xs font-semibold uppercase tracking-wide"
+        style={{ color: `color-mix(in oklab, ${accent} 75%, transparent)` }}
+        dir="ltr"
+      >
+        {service.name_en}
+      </p>
+
+      {/* Description */}
       {pick(service, "description") && (
-        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+        <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
           {pick(service, "description")}
         </p>
       )}
+
+      {/* Action */}
       {whatsapp && (
-        <div className="mt-5 pt-2">
-          <Button
-            asChild
-            size="sm"
-            variant="outline"
-            className="w-full border-[color:var(--whatsapp)]/40 text-[color:var(--whatsapp)] hover:bg-[color:var(--whatsapp)]/10"
+        <div className="mt-auto pt-8">
+          <a
+            href={buildWhatsAppUrl(whatsapp, `${t("wa.serviceMsg")} ${pick(service, "name")}`)}
+            target="_blank"
+            rel="noopener"
+            className="group/btn inline-flex w-full items-center justify-center gap-3 rounded-2xl border-2 px-6 py-4 font-bold transition-all duration-300"
+            style={{
+              borderColor: accent,
+              color: accent,
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = accent;
+              e.currentTarget.style.color = "white";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.color = accent;
+            }}
           >
-            <a
-              href={buildWhatsAppUrl(whatsapp, `${t("wa.serviceMsg")} ${pick(service, "name")}`)}
-              target="_blank"
-              rel="noopener"
-            >
-              <MessageCircle className="h-4 w-4 me-1" />
-              {t("common.bookNow")}
-            </a>
-          </Button>
+            <span>{t("common.bookNow")}</span>
+            <MessageCircle className="h-5 w-5 transition-transform group-hover/btn:scale-110" />
+          </a>
         </div>
       )}
     </article>
