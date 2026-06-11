@@ -72,8 +72,10 @@ export function ServiceCard({ service, tone = "primary", whatsapp, index = 0 }: 
       {/* Icon + number row */}
       <div className="mb-8 flex items-center justify-between">
         <div
-          className="flex h-16 w-16 items-center justify-center rounded-2xl transition-all duration-500 group-hover:scale-110"
+          className="service-card-icon flex h-16 w-16 items-center justify-center rounded-2xl transition-all duration-500 group-hover:scale-110"
           style={{
+            ["--accent" as any]: accent,
+            ["--accent-gradient" as any]: gradient,
             background: `color-mix(in oklab, ${accent} 12%, transparent)`,
             color: accent,
           }}
