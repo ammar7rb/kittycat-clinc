@@ -250,3 +250,11 @@
   }
 }
 
+
+@layer utilities {
+  .group:hover .service-card-icon {
+    background: var(--accent-gradient) !important;
+    color: #fff !important;
+    box-shadow: 0 12px 30px -8px color-mix(in oklab, var(--accent) 55%, transparent);
+  }
+}
