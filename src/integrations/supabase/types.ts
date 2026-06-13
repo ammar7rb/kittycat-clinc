@@ -158,6 +158,69 @@ export type Database = {
         }
         Relationships: []
       }
+      products: {
+        Row: {
+          brand: string | null
+          category: Database["public"]["Enums"]["product_category"]
+          compare_at_price: number | null
+          created_at: string
+          currency: string
+          description_ar: string | null
+          description_en: string | null
+          id: string
+          image_url: string | null
+          is_active: boolean
+          is_featured: boolean
+          name_ar: string
+          name_en: string
+          pet_type: Database["public"]["Enums"]["pet_type"]
+          price: number
+          sort_order: number
+          stock: number
+          updated_at: string
+        }
+        Insert: {
+          brand?: string | null
+          category?: Database["public"]["Enums"]["product_category"]
+          compare_at_price?: number | null
+          created_at?: string
+          currency?: string
+          description_ar?: string | null
+          description_en?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          is_featured?: boolean
+          name_ar: string
+          name_en: string
+          pet_type?: Database["public"]["Enums"]["pet_type"]
+          price?: number
+          sort_order?: number
+          stock?: number
+          updated_at?: string
+        }
+        Update: {
+          brand?: string | null
+          category?: Database["public"]["Enums"]["product_category"]
+          compare_at_price?: number | null
+          created_at?: string
+          currency?: string
+          description_ar?: string | null
+          description_en?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          is_featured?: boolean
+          name_ar?: string
+          name_en?: string
+          pet_type?: Database["public"]["Enums"]["pet_type"]
+          price?: number
+          sort_order?: number
+          stock?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       services: {
         Row: {
           created_at: string
@@ -266,6 +329,8 @@ export type Database = {
     }
     Enums: {
       app_role: "admin"
+      pet_type: "cat" | "dog" | "both"
+      product_category: "food" | "accessories" | "toys" | "health" | "other"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -394,6 +459,8 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin"],
+      pet_type: ["cat", "dog", "both"],
+      product_category: ["food", "accessories", "toys", "health", "other"],
     },
   },
 } as const
