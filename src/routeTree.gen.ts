@@ -10,16 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as ServicesRouteImport } from './routes/services'
+import { Route as ShopRouteImport } from './routes/shop'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ShopProductIdRouteImport } from './routes/shop.$productId'
 import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authenticated/admin/route'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedAdminSettingsRouteImport } from './routes/_authenticated/admin/settings'
 import { Route as AuthenticatedAdminServicesRouteImport } from './routes/_authenticated/admin/services'
+import { Route as AuthenticatedAdminProductsRouteImport } from './routes/_authenticated/admin/products'
 import { Route as AuthenticatedAdminOffersRouteImport } from './routes/_authenticated/admin/offers'
 import { Route as AuthenticatedAdminMediaRouteImport } from './routes/_authenticated/admin/media'
 import { Route as AuthenticatedAdminContentRouteImport } from './routes/_authenticated/admin/content'
@@ -30,9 +32,9 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ServicesRoute = ServicesRouteImport.update({
-  id: '/services',
-  path: '/services',
+const ShopRoute = ShopRouteImport.update({
+  id: '/shop',
+  path: '/shop',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -59,6 +61,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ShopProductIdRoute = ShopProductIdRouteImport.update({
+  id: '/$productId',
+  path: '/$productId',
+  getParentRoute: () => ShopRoute,
+} as any)
 const AuthenticatedAdminRouteRoute = AuthenticatedAdminRouteRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -79,6 +86,12 @@ const AuthenticatedAdminServicesRoute =
   AuthenticatedAdminServicesRouteImport.update({
     id: '/services',
     path: '/services',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminProductsRoute =
+  AuthenticatedAdminProductsRouteImport.update({
+    id: '/products',
+    path: '/products',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const AuthenticatedAdminOffersRoute =
@@ -110,13 +123,15 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
-  '/services': typeof ServicesRoute
+  '/shop': typeof ShopRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
+  '/shop/$productId': typeof ShopProductIdRoute
   '/admin/branches': typeof AuthenticatedAdminBranchesRoute
   '/admin/content': typeof AuthenticatedAdminContentRoute
   '/admin/media': typeof AuthenticatedAdminMediaRoute
   '/admin/offers': typeof AuthenticatedAdminOffersRoute
+  '/admin/products': typeof AuthenticatedAdminProductsRoute
   '/admin/services': typeof AuthenticatedAdminServicesRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
@@ -126,12 +141,14 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
-  '/services': typeof ServicesRoute
+  '/shop': typeof ShopRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/shop/$productId': typeof ShopProductIdRoute
   '/admin/branches': typeof AuthenticatedAdminBranchesRoute
   '/admin/content': typeof AuthenticatedAdminContentRoute
   '/admin/media': typeof AuthenticatedAdminMediaRoute
   '/admin/offers': typeof AuthenticatedAdminOffersRoute
+  '/admin/products': typeof AuthenticatedAdminProductsRoute
   '/admin/services': typeof AuthenticatedAdminServicesRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
@@ -143,13 +160,15 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
-  '/services': typeof ServicesRoute
+  '/shop': typeof ShopRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
+  '/shop/$productId': typeof ShopProductIdRoute
   '/_authenticated/admin/branches': typeof AuthenticatedAdminBranchesRoute
   '/_authenticated/admin/content': typeof AuthenticatedAdminContentRoute
   '/_authenticated/admin/media': typeof AuthenticatedAdminMediaRoute
   '/_authenticated/admin/offers': typeof AuthenticatedAdminOffersRoute
+  '/_authenticated/admin/products': typeof AuthenticatedAdminProductsRoute
   '/_authenticated/admin/services': typeof AuthenticatedAdminServicesRoute
   '/_authenticated/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
@@ -161,13 +180,15 @@ export interface FileRouteTypes {
     | '/about'
     | '/auth'
     | '/contact'
-    | '/services'
+    | '/shop'
     | '/sitemap.xml'
     | '/admin'
+    | '/shop/$productId'
     | '/admin/branches'
     | '/admin/content'
     | '/admin/media'
     | '/admin/offers'
+    | '/admin/products'
     | '/admin/services'
     | '/admin/settings'
     | '/admin/'
@@ -177,12 +198,14 @@ export interface FileRouteTypes {
     | '/about'
     | '/auth'
     | '/contact'
-    | '/services'
+    | '/shop'
     | '/sitemap.xml'
+    | '/shop/$productId'
     | '/admin/branches'
     | '/admin/content'
     | '/admin/media'
     | '/admin/offers'
+    | '/admin/products'
     | '/admin/services'
     | '/admin/settings'
     | '/admin'
@@ -193,13 +216,15 @@ export interface FileRouteTypes {
     | '/about'
     | '/auth'
     | '/contact'
-    | '/services'
+    | '/shop'
     | '/sitemap.xml'
     | '/_authenticated/admin'
+    | '/shop/$productId'
     | '/_authenticated/admin/branches'
     | '/_authenticated/admin/content'
     | '/_authenticated/admin/media'
     | '/_authenticated/admin/offers'
+    | '/_authenticated/admin/products'
     | '/_authenticated/admin/services'
     | '/_authenticated/admin/settings'
     | '/_authenticated/admin/'
@@ -211,7 +236,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AuthRoute: typeof AuthRoute
   ContactRoute: typeof ContactRoute
-  ServicesRoute: typeof ServicesRoute
+  ShopRoute: typeof ShopRouteWithChildren
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
 }
 
@@ -224,11 +249,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/services': {
-      id: '/services'
-      path: '/services'
-      fullPath: '/services'
-      preLoaderRoute: typeof ServicesRouteImport
+    '/shop': {
+      id: '/shop'
+      path: '/shop'
+      fullPath: '/shop'
+      preLoaderRoute: typeof ShopRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -266,6 +291,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/shop/$productId': {
+      id: '/shop/$productId'
+      path: '/$productId'
+      fullPath: '/shop/$productId'
+      preLoaderRoute: typeof ShopProductIdRouteImport
+      parentRoute: typeof ShopRoute
+    }
     '/_authenticated/admin': {
       id: '/_authenticated/admin'
       path: '/admin'
@@ -292,6 +324,13 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/admin/services'
       preLoaderRoute: typeof AuthenticatedAdminServicesRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/products': {
+      id: '/_authenticated/admin/products'
+      path: '/products'
+      fullPath: '/admin/products'
+      preLoaderRoute: typeof AuthenticatedAdminProductsRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/offers': {
@@ -330,6 +369,7 @@ interface AuthenticatedAdminRouteRouteChildren {
   AuthenticatedAdminContentRoute: typeof AuthenticatedAdminContentRoute
   AuthenticatedAdminMediaRoute: typeof AuthenticatedAdminMediaRoute
   AuthenticatedAdminOffersRoute: typeof AuthenticatedAdminOffersRoute
+  AuthenticatedAdminProductsRoute: typeof AuthenticatedAdminProductsRoute
   AuthenticatedAdminServicesRoute: typeof AuthenticatedAdminServicesRoute
   AuthenticatedAdminSettingsRoute: typeof AuthenticatedAdminSettingsRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
@@ -341,6 +381,7 @@ const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren
     AuthenticatedAdminContentRoute: AuthenticatedAdminContentRoute,
     AuthenticatedAdminMediaRoute: AuthenticatedAdminMediaRoute,
     AuthenticatedAdminOffersRoute: AuthenticatedAdminOffersRoute,
+    AuthenticatedAdminProductsRoute: AuthenticatedAdminProductsRoute,
     AuthenticatedAdminServicesRoute: AuthenticatedAdminServicesRoute,
     AuthenticatedAdminSettingsRoute: AuthenticatedAdminSettingsRoute,
     AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
@@ -362,15 +403,35 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface ShopRouteChildren {
+  ShopProductIdRoute: typeof ShopProductIdRoute
+}
+
+const ShopRouteChildren: ShopRouteChildren = {
+  ShopProductIdRoute: ShopProductIdRoute,
+}
+
+const ShopRouteWithChildren = ShopRoute._addFileChildren(ShopRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
   AuthRoute: AuthRoute,
   ContactRoute: ContactRoute,
-  ServicesRoute: ServicesRoute,
+  ShopRoute: ShopRouteWithChildren,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

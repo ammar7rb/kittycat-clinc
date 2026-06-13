@@ -20,7 +20,7 @@ export function Header() {
 
   const nav = [
     { to: "/", label: t("nav.home") },
-    { to: "/services", label: t("nav.services") },
+    { to: "/shop", label: t("nav.shop") },
     { to: "/about", label: t("nav.about") },
     { to: "/contact", label: t("nav.contact") },
   ] as const;
