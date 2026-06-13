@@ -33,8 +33,8 @@ function ProductDetailPage() {
   const { productId } = Route.useParams();
   const { lang } = useLanguage();
   const pick = useLocalized();
-  const { data: branches } = useBranches();
-  const firstWa = branches?.[0]?.whatsapp;
+  const { data: settings } = useSettings();
+  const instagramUrl = settings?.instagram;
 
   const { data: product, isLoading } = useQuery({
     queryKey: ["product", productId],
