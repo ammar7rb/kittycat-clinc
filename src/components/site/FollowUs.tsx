@@ -18,9 +18,16 @@ type Social = {
   gradient: string;
 };
 
-export function FollowUs({ compact = false }: { compact?: boolean }) {
+export function FollowUs({
+  compact = false,
+  variant = "card",
+}: {
+  compact?: boolean;
+  variant?: "card" | "filled";
+}) {
   const { t } = useLanguage();
   const { data: settings } = useSettings();
+  const filled = variant === "filled";
 
   const socials: Social[] = [
     {
