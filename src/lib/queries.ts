@@ -43,6 +43,8 @@ export type OfferRow = {
   end_date: string | null;
   sort_order: number;
   is_active: boolean;
+};
+
 
 export type ProductRow = {
   id: string;
