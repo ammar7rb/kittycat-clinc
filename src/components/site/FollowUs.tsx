@@ -18,9 +18,16 @@ type Social = {
   gradient: string;
 };
 
-export function FollowUs({ compact = false }: { compact?: boolean }) {
+export function FollowUs({
+  compact = false,
+  variant = "card",
+}: {
+  compact?: boolean;
+  variant?: "card" | "filled";
+}) {
   const { t } = useLanguage();
   const { data: settings } = useSettings();
+  const filled = variant === "filled";
 
   const socials: Social[] = [
     {
@@ -64,38 +71,74 @@ export function FollowUs({ compact = false }: { compact?: boolean }) {
 
   return (
     <section
-      className={`reveal reveal-up relative overflow-hidden rounded-3xl border border-border bg-card ${
-        compact ? "p-8" : "p-10 md:p-14"
-      }`}
+      className={`reveal reveal-up relative overflow-hidden ${
+        filled
+          ? "rounded-[3rem] text-white"
+          : "rounded-3xl border border-border bg-card"
+      } ${compact ? "p-8" : "p-10 md:p-14"}`}
+      style={
+        filled
+          ? {
+              background:
+                "linear-gradient(135deg, var(--primary), color-mix(in oklab, var(--primary) 70%, #000))",
+            }
+          : undefined
+      }
     >
       {/* Decorative glows */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-24 -end-24 h-64 w-64 rounded-full blur-3xl opacity-40"
-        style={{ background: "var(--gradient-primary)" }}
+        className={`pointer-events-none absolute -top-24 -end-24 h-64 w-64 rounded-full blur-3xl ${
+          filled ? "opacity-25" : "opacity-40"
+        }`}
+        style={{
+          background: filled ? "#ffffff" : "var(--gradient-primary)",
+        }}
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -bottom-24 -start-24 h-64 w-64 rounded-full blur-3xl opacity-30"
-        style={{ background: "var(--gradient-secondary)" }}
+        className={`pointer-events-none absolute -bottom-24 -start-24 h-64 w-64 rounded-full blur-3xl ${
+          filled ? "opacity-40" : "opacity-30"
+        }`}
+        style={{
+          background: filled
+            ? "color-mix(in oklab, var(--secondary) 70%, transparent)"
+            : "var(--gradient-secondary)",
+        }}
       />
 
       <div className="relative text-center">
         <span
           className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold"
-          style={{
-            borderColor: "color-mix(in oklab, var(--secondary) 35%, transparent)",
-            background: "color-mix(in oklab, var(--secondary) 12%, transparent)",
-            color: "var(--secondary)",
-          }}
+          style={
+            filled
+              ? {
+                  borderColor: "color-mix(in oklab, #ffffff 35%, transparent)",
+                  background: "color-mix(in oklab, #ffffff 15%, transparent)",
+                  color: "#ffffff",
+                }
+              : {
+                  borderColor: "color-mix(in oklab, var(--secondary) 35%, transparent)",
+                  background: "color-mix(in oklab, var(--secondary) 12%, transparent)",
+                  color: "var(--secondary)",
+                }
+          }
         >
           <Sparkles className="h-3 w-3" />
           {t("follow.badge")}
         </span>
-        <h2 className="mt-4 text-3xl font-extrabold text-foreground md:text-4xl">
+        <h2
+          className={`mt-4 text-3xl font-extrabold md:text-4xl ${
+            filled ? "text-white" : "text-foreground"
+          }`}
+        >
           {t("follow.title")}
         </h2>
-        <p className="mt-3 max-w-xl mx-auto text-sm leading-relaxed text-muted-foreground md:text-base">
+        <p
+          className={`mt-3 max-w-xl mx-auto text-sm leading-relaxed md:text-base ${
+            filled ? "text-white/80" : "text-muted-foreground"
+          }`}
+        >
           {t("follow.subtitle")}
         </p>
       </div>
@@ -116,7 +159,11 @@ export function FollowUs({ compact = false }: { compact?: boolean }) {
             target="_blank"
             rel="noopener"
             aria-label={label}
-            className="group relative flex flex-col items-center gap-3 overflow-hidden rounded-2xl border border-border bg-background p-6 text-center transition-all duration-500 hover:-translate-y-1.5 hover:border-transparent hover:shadow-[var(--shadow-elegant)]"
+            className={`group relative flex flex-col items-center gap-3 overflow-hidden rounded-2xl border p-6 text-center transition-all duration-500 hover:-translate-y-1.5 hover:border-transparent hover:shadow-[var(--shadow-elegant)] ${
+              filled
+                ? "border-white/15 bg-white/10 backdrop-blur-sm"
+                : "border-border bg-background"
+            }`}
           >
             {/* Hover gradient sweep */}
             <span
@@ -130,12 +177,18 @@ export function FollowUs({ compact = false }: { compact?: boolean }) {
             >
               <Icon className="h-7 w-7" />
             </span>
-            <span className="relative z-10 text-sm font-bold text-foreground transition-colors duration-500 group-hover:text-white">
+            <span
+              className={`relative z-10 text-sm font-bold transition-colors duration-500 group-hover:text-white ${
+                filled ? "text-white" : "text-foreground"
+              }`}
+            >
               {label}
             </span>
             <span
               dir="ltr"
-              className="relative z-10 text-xs text-muted-foreground transition-colors duration-500 group-hover:text-white/85"
+              className={`relative z-10 text-xs transition-colors duration-500 group-hover:text-white/85 ${
+                filled ? "text-white/70" : "text-muted-foreground"
+              }`}
             >
               {handle}
             </span>
