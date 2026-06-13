@@ -2,6 +2,7 @@ import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
 import {
   LayoutDashboard,
   Stethoscope,
+  ShoppingBag,
   Tag,
   MapPin,
   FileText,
@@ -26,7 +27,8 @@ import { toast } from "sonner";
 
 const items = [
   { title: "نظرة عامة", url: "/admin", icon: LayoutDashboard, exact: true },
-  { title: "الخدمات", url: "/admin/services", icon: Stethoscope },
+  { title: "المنتجات", url: "/admin/products", icon: ShoppingBag },
+  { title: "الخدمات الطبية", url: "/admin/services", icon: Stethoscope },
   { title: "العروض", url: "/admin/offers", icon: Tag },
   { title: "الفروع", url: "/admin/branches", icon: MapPin },
   { title: "محتوى الصفحات", url: "/admin/content", icon: FileText },
