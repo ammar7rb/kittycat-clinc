@@ -208,6 +208,10 @@ export const translations = {
     "contact.hours": "Working hours",
     "contact.openMaps": "Open in Maps",
 
+    "follow.badge": "Follow us",
+    "follow.title": "Follow us on social",
+    "follow.subtitle": "Stay in the loop with the latest news, vet tips, and exclusive offers from our branches.",
+
     "wa.defaultMsg": "Hello, I'd like to ask about Kitty Cat Clinic services",
     "wa.serviceMsg": "Hello, I'd like to book a session for:",
     "wa.offerMsg": "Hello, I'd like to ask about the offer:",
