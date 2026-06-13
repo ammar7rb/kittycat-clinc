@@ -181,6 +181,11 @@ function AboutPage() {
           </ul>
         </section>
       )}
+
+      {/* Follow us */}
+      <section className="container mx-auto px-4 pb-16 md:pb-20">
+        <FollowUs />
+      </section>
     </SiteLayout>
   );
 }
