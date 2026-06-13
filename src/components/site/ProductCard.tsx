@@ -90,22 +90,22 @@ export function ProductCard({
 
       {/* Body */}
       <div className="flex flex-1 flex-col p-5">
-        {product.brand && (
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-primary">
-            {product.brand}
-          </span>
-        )}
-        <h3 className="mt-1 line-clamp-2 text-base font-bold text-foreground">
+        <div className="min-h-[18px]">
+          {product.brand && (
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-primary">
+              {product.brand}
+            </span>
+          )}
+        </div>
+        <h3 className="mt-1 line-clamp-2 min-h-[2.75rem] text-base font-bold leading-snug text-foreground">
           {name}
         </h3>
-        {desc && (
-          <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
-            {desc}
-          </p>
-        )}
+        <p className="mt-2 line-clamp-2 min-h-[2.5rem] text-sm leading-relaxed text-muted-foreground">
+          {desc ?? ""}
+        </p>
 
         {/* Price */}
-        <div className="mt-4 flex items-baseline gap-2">
+        <div className="mt-auto flex items-baseline gap-2 pt-4">
           <span className="text-2xl font-extrabold text-foreground">
             {Number(product.price).toFixed(0)}
           </span>
@@ -120,7 +120,7 @@ export function ProductCard({
         </div>
 
         {/* Actions */}
-        <div className="mt-5">
+        <div className="mt-4">
           {instagramUrl && product.stock > 0 ? (
             <Button
               asChild
