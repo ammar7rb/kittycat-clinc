@@ -43,7 +43,40 @@ export type OfferRow = {
   end_date: string | null;
   sort_order: number;
   is_active: boolean;
+
+export type ProductRow = {
+  id: string;
+  name_ar: string;
+  name_en: string;
+  description_ar: string | null;
+  description_en: string | null;
+  price: number;
+  compare_at_price: number | null;
+  currency: string;
+  image_url: string | null;
+  category: "food" | "accessories" | "toys" | "health" | "other";
+  pet_type: "cat" | "dog" | "both";
+  brand: string | null;
+  stock: number;
+  is_featured: boolean;
+  is_active: boolean;
+  sort_order: number;
 };
+
+export function useProducts(filter?: { petType?: "cat" | "dog" | "both"; category?: ProductRow["category"] }) {
+  return useQuery({
+    queryKey: ["products", filter?.petType ?? "all", filter?.category ?? "all"],
+    queryFn: async (): Promise<ProductRow[]> => {
+      let q = supabase.from("products").select("*").eq("is_active", true).order("sort_order");
+      if (filter?.petType) q = q.in("pet_type", [filter.petType, "both"]);
+      if (filter?.category) q = q.eq("category", filter.category);
+      const { data, error } = await q;
+      if (error) throw error;
+      return (data ?? []) as ProductRow[];
+    },
+  });
+}
+
 
 export function useBranches() {
   return useQuery({
