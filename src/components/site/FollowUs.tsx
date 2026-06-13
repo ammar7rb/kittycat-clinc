@@ -159,7 +159,11 @@ export function FollowUs({
             target="_blank"
             rel="noopener"
             aria-label={label}
-            className="group relative flex flex-col items-center gap-3 overflow-hidden rounded-2xl border border-border bg-background p-6 text-center transition-all duration-500 hover:-translate-y-1.5 hover:border-transparent hover:shadow-[var(--shadow-elegant)]"
+            className={`group relative flex flex-col items-center gap-3 overflow-hidden rounded-2xl border p-6 text-center transition-all duration-500 hover:-translate-y-1.5 hover:border-transparent hover:shadow-[var(--shadow-elegant)] ${
+              filled
+                ? "border-white/15 bg-white/10 backdrop-blur-sm"
+                : "border-border bg-background"
+            }`}
           >
             {/* Hover gradient sweep */}
             <span
@@ -173,12 +177,18 @@ export function FollowUs({
             >
               <Icon className="h-7 w-7" />
             </span>
-            <span className="relative z-10 text-sm font-bold text-foreground transition-colors duration-500 group-hover:text-white">
+            <span
+              className={`relative z-10 text-sm font-bold transition-colors duration-500 group-hover:text-white ${
+                filled ? "text-white" : "text-foreground"
+              }`}
+            >
               {label}
             </span>
             <span
               dir="ltr"
-              className="relative z-10 text-xs text-muted-foreground transition-colors duration-500 group-hover:text-white/85"
+              className={`relative z-10 text-xs transition-colors duration-500 group-hover:text-white/85 ${
+                filled ? "text-white/70" : "text-muted-foreground"
+              }`}
             >
               {handle}
             </span>
