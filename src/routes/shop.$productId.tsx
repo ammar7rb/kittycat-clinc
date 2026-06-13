@@ -165,19 +165,19 @@ function ProductDetailPage() {
             </div>
 
             <div className="mt-auto pt-8">
-              {firstWa && product.stock > 0 && (
+              {instagramUrl && product.stock > 0 && (
                 <Button
                   asChild
                   size="lg"
-                  className="w-full bg-[color:var(--whatsapp)] text-[color:var(--whatsapp-foreground)] hover:opacity-90 sm:w-auto"
+                  className="w-full text-white hover:opacity-90 sm:w-auto"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)",
+                  }}
                 >
-                  <a
-                    href={buildWhatsAppUrl(firstWa, waMsg)}
-                    target="_blank"
-                    rel="noopener"
-                  >
-                    <MessageCircle className="h-5 w-5 me-2" />
-                    {lang === "ar" ? "اطلب عبر واتساب" : "Order via WhatsApp"}
+                  <a href={instagramUrl} target="_blank" rel="noopener">
+                    <Instagram className="h-5 w-5 me-2" />
+                    {lang === "ar" ? "اطلب عبر إنستجرام" : "Order via Instagram"}
                   </a>
                 </Button>
               )}
