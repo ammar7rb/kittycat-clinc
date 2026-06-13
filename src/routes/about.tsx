@@ -3,6 +3,7 @@ import { Cat, Heart, FlaskConical, ShieldCheck, MapPin, Sparkles } from "lucide-
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { PageHero } from "@/components/site/PageHero";
 import { SectionHeading } from "@/components/site/SectionHeading";
+import { FollowUs } from "@/components/site/FollowUs";
 import { useLanguage, useLocalized } from "@/lib/i18n/LanguageProvider";
 import { useBranches } from "@/lib/queries";
 
@@ -180,6 +181,11 @@ function AboutPage() {
           </ul>
         </section>
       )}
+
+      {/* Follow us */}
+      <section className="container mx-auto px-4 pb-16 md:pb-20">
+        <FollowUs />
+      </section>
     </SiteLayout>
   );
 }

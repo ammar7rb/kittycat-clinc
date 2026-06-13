@@ -1,30 +1,28 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { MessageCircle, Phone, MapPin, Clock, ExternalLink, Sparkles } from "lucide-react";
+import { MessageCircle, Phone, MapPin, ExternalLink, Sparkles } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { PageHero } from "@/components/site/PageHero";
+import { FollowUs } from "@/components/site/FollowUs";
 import { useLanguage, useLocalized } from "@/lib/i18n/LanguageProvider";
 import { useBranches } from "@/lib/queries";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
-import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "تواصل معنا — Kitty Cat Clinic | الرقام، الصنب، الرحبة" },
+      { title: "تواصل معنا — Kitty Cat Clinic | الرغامة، السنابل، الرحاب" },
       {
         name: "description",
         content:
-          "اختر الفرع الأقرب وتواصل معنا مباشرة عبر واتساب أو الاتصال — Kitty Cat Clinic بثلاثة فروع في الإمارات.",
+          "اختر الفرع الأقرب وتواصل معنا مباشرة عبر واتساب أو الاتصال — Kitty Cat Clinic بثلاثة فروع في جدة.",
       },
       { property: "og:title", content: "تواصل مع Kitty Cat Clinic" },
       {
         property: "og:description",
-        content: "ثلاثة فروع — تواصل واتساب مباشر مع الفرع الأقرب لك.",
+        content: "ثلاثة فروع في جدة — تواصل واتساب مباشر مع الفرع الأقرب لك.",
       },
     ],
-    links: [
-      { rel: "canonical", href: "/contact" },
-    ],
+    links: [{ rel: "canonical", href: "/contact" }],
   }),
   component: ContactPage,
 });
@@ -48,7 +46,7 @@ function ContactPage() {
       />
 
       <section className="container mx-auto px-4 py-16 md:py-20">
-        <div className="mx-auto mb-10 max-w-2xl rounded-2xl border border-secondary/30 bg-secondary/10 px-5 py-4 text-center text-sm font-medium text-foreground">
+        <div className="mx-auto mb-12 max-w-2xl rounded-2xl border border-secondary/30 bg-secondary/10 px-5 py-4 text-center text-sm font-medium text-foreground">
           <MessageCircle className="inline h-4 w-4 me-2 text-secondary" />
           {t("contact.preferWhatsapp")}
         </div>
@@ -60,137 +58,140 @@ function ContactPage() {
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {branches?.map((b, i) => {
             const isOrange = i % 2 === 1;
-            const mapsHref =
-              b.maps_url ??
-              (b.latitude && b.longitude
-                ? `https://www.google.com/maps?q=${b.latitude},${b.longitude}`
-                : null);
+            const gradient = isOrange
+              ? "var(--gradient-secondary)"
+              : "var(--gradient-primary)";
+            const accent = isOrange ? "var(--secondary)" : "var(--primary)";
 
             return (
               <article
                 key={b.id}
                 data-reveal-delay={i * 110}
-                className="reveal reveal-up relative flex flex-col overflow-hidden rounded-2xl border bg-card p-6"
-                style={{
-                  borderColor: isOrange
-                    ? "color-mix(in oklab, var(--secondary) 25%, var(--border))"
-                    : "color-mix(in oklab, var(--primary) 25%, var(--border))",
-                }}
+                className="reveal reveal-up group relative flex flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all duration-500 hover:-translate-y-2 hover:shadow-[var(--shadow-elegant)]"
               >
-                <div
-                  aria-hidden
-                  className="absolute inset-x-0 top-0 h-1"
-                  style={{
-                    background: isOrange
-                      ? "var(--gradient-secondary)"
-                      : "var(--gradient-primary)",
-                  }}
-                />
+                {/* Top gradient strip */}
+                <div aria-hidden className="h-1.5" style={{ background: gradient }} />
 
-                <div className="flex items-center gap-3">
+                {/* Header */}
+                <div className="flex items-start gap-4 p-6 pb-4">
                   <div
-                    className="flex h-11 w-11 items-center justify-center rounded-xl text-white shadow-[var(--shadow-soft)]"
-                    style={{
-                      background: isOrange
-                        ? "var(--gradient-secondary)"
-                        : "var(--gradient-primary)",
-                    }}
+                    className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-white shadow-[var(--shadow-soft)] transition-transform duration-500 group-hover:scale-110"
+                    style={{ background: gradient }}
                   >
-                    <MapPin className="h-5 w-5" />
+                    <MapPin className="h-7 w-7" />
                   </div>
-                  <h2 className="text-xl font-bold text-foreground">{pick(b, "name")}</h2>
+                  <div className="min-w-0 flex-1">
+                    <h2 className="text-xl font-extrabold leading-tight text-foreground">
+                      {pick(b, "name")}
+                    </h2>
+                    {pick(b, "address") && (
+                      <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                        {pick(b, "address")}
+                      </p>
+                    )}
+                  </div>
                 </div>
 
-                <dl className="mt-5 space-y-3 text-sm">
-                  {pick(b, "address") && (
-                    <div className="flex gap-2">
-                      <dt className="shrink-0 font-semibold text-foreground">
-                        {t("contact.address")}:
-                      </dt>
-                      <dd className="text-muted-foreground">{pick(b, "address")}</dd>
-                    </div>
-                  )}
-                  {pick(b, "working_hours") && (
-                    <div className="flex gap-2">
-                      <dt className="shrink-0 font-semibold text-foreground">
-                        <Clock className="inline h-4 w-4 me-1" />
-                        {t("contact.hours")}:
-                      </dt>
-                      <dd className="text-muted-foreground">{pick(b, "working_hours")}</dd>
-                    </div>
-                  )}
+                {/* Divider */}
+                <div className="mx-6 h-px bg-border" />
+
+                {/* Contact rows */}
+                <div className="space-y-2 p-6 pt-4">
                   {b.phone && (
-                    <div className="flex gap-2">
-                      <dt className="shrink-0 font-semibold text-foreground">
-                        {t("contact.phone")}:
-                      </dt>
-                      <dd dir="ltr" className="text-muted-foreground">
-                        <a href={`tel:${b.phone}`} className="hover:text-primary">
+                    <a
+                      href={`tel:${b.phone}`}
+                      className="flex items-center gap-3 rounded-xl border border-transparent bg-background/40 p-3 transition-all hover:border-border hover:bg-background"
+                    >
+                      <span
+                        className="flex h-9 w-9 items-center justify-center rounded-lg"
+                        style={{
+                          background: `color-mix(in oklab, ${accent} 12%, transparent)`,
+                          color: accent,
+                        }}
+                      >
+                        <Phone className="h-4 w-4" />
+                      </span>
+                      <span className="flex flex-col">
+                        <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                          {t("contact.phone")}
+                        </span>
+                        <span dir="ltr" className="text-sm font-bold text-foreground">
                           {b.phone}
-                        </a>
-                      </dd>
-                    </div>
+                        </span>
+                      </span>
+                    </a>
                   )}
                   {b.whatsapp && (
-                    <div className="flex gap-2">
-                      <dt className="shrink-0 font-semibold text-foreground">
-                        {t("contact.whatsapp")}:
-                      </dt>
-                      <dd dir="ltr" className="text-muted-foreground">{b.whatsapp}</dd>
-                    </div>
+                    <a
+                      href={buildWhatsAppUrl(b.whatsapp, t("wa.defaultMsg"))}
+                      target="_blank"
+                      rel="noopener"
+                      className="flex items-center gap-3 rounded-xl border border-transparent bg-background/40 p-3 transition-all hover:border-[color:var(--whatsapp)]/40 hover:bg-background"
+                    >
+                      <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[color:var(--whatsapp)]/12 text-[color:var(--whatsapp)]">
+                        <MessageCircle className="h-4 w-4" />
+                      </span>
+                      <span className="flex flex-col">
+                        <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                          {t("contact.whatsapp")}
+                        </span>
+                        <span dir="ltr" className="text-sm font-bold text-foreground">
+                          +{b.whatsapp}
+                        </span>
+                      </span>
+                    </a>
                   )}
-                </dl>
+                  {b.maps_url && (
+                    <a
+                      href={b.maps_url}
+                      target="_blank"
+                      rel="noopener"
+                      className="flex items-center gap-3 rounded-xl border border-transparent bg-background/40 p-3 transition-all hover:border-border hover:bg-background"
+                    >
+                      <span
+                        className="flex h-9 w-9 items-center justify-center rounded-lg"
+                        style={{
+                          background: `color-mix(in oklab, ${accent} 12%, transparent)`,
+                          color: accent,
+                        }}
+                      >
+                        <ExternalLink className="h-4 w-4" />
+                      </span>
+                      <span className="flex flex-col">
+                        <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                          {t("common.location")}
+                        </span>
+                        <span className="text-sm font-bold text-foreground">
+                          {t("contact.openMaps")}
+                        </span>
+                      </span>
+                    </a>
+                  )}
+                </div>
 
-                {/* Map embed */}
-                {b.maps_embed && (
-                  <div className="mt-5 overflow-hidden rounded-xl border border-border">
-                    <iframe
-                      src={b.maps_embed}
-                      loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                      title={`${pick(b, "name")} map`}
-                      className="h-44 w-full"
-                    />
+                {/* CTA footer */}
+                {b.whatsapp && (
+                  <div className="mt-auto p-6 pt-0">
+                    <a
+                      href={buildWhatsAppUrl(b.whatsapp, t("wa.defaultMsg"))}
+                      target="_blank"
+                      rel="noopener"
+                      className="inline-flex w-full items-center justify-center gap-2 rounded-2xl px-5 py-3 font-bold text-white shadow-[var(--shadow-soft)] transition-all hover:opacity-95 hover:shadow-[var(--shadow-elegant)]"
+                      style={{ background: gradient }}
+                    >
+                      <MessageCircle className="h-5 w-5" />
+                      {t("common.bookNow")}
+                    </a>
                   </div>
                 )}
-
-                <div className="mt-auto pt-6 flex flex-wrap gap-2">
-                  {b.whatsapp && (
-                    <Button
-                      asChild
-                      size="sm"
-                      className="bg-[color:var(--whatsapp)] text-[color:var(--whatsapp-foreground)] hover:opacity-90"
-                    >
-                      <a
-                        href={buildWhatsAppUrl(b.whatsapp, t("wa.defaultMsg"))}
-                        target="_blank"
-                        rel="noopener"
-                      >
-                        <MessageCircle className="h-4 w-4 me-1" />
-                        {t("common.whatsapp")}
-                      </a>
-                    </Button>
-                  )}
-                  {b.phone && (
-                    <Button asChild size="sm" variant="outline">
-                      <a href={`tel:${b.phone}`}>
-                        <Phone className="h-4 w-4 me-1" />
-                        {t("common.call")}
-                      </a>
-                    </Button>
-                  )}
-                  {mapsHref && (
-                    <Button asChild size="sm" variant="ghost">
-                      <a href={mapsHref} target="_blank" rel="noopener">
-                        <ExternalLink className="h-4 w-4 me-1" />
-                        {t("contact.openMaps")}
-                      </a>
-                    </Button>
-                  )}
-                </div>
               </article>
             );
           })}
+        </div>
+
+        {/* Follow us */}
+        <div className="mt-16 md:mt-20">
+          <FollowUs />
         </div>
       </section>
     </SiteLayout>

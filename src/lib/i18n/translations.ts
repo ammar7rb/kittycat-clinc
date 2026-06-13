@@ -98,6 +98,11 @@ export const translations = {
     "contact.hours": "ساعات العمل",
     "contact.openMaps": "افتح في الخرائط",
 
+    // Follow us
+    "follow.badge": "تابعنا",
+    "follow.title": "تابعنا على منصات التواصل",
+    "follow.subtitle": "تابع آخر الأخبار، النصائح البيطرية، والعروض الحصرية من فروعنا.",
+
     // WhatsApp
     "wa.defaultMsg": "السلام عليكم، أود الاستفسار عن خدمات Kitty Cat Clinic",
     "wa.serviceMsg": "السلام عليكم، أود حجز موعد لخدمة:",
@@ -202,6 +207,10 @@ export const translations = {
     "contact.whatsapp": "WhatsApp",
     "contact.hours": "Working hours",
     "contact.openMaps": "Open in Maps",
+
+    "follow.badge": "Follow us",
+    "follow.title": "Follow us on social",
+    "follow.subtitle": "Stay in the loop with the latest news, vet tips, and exclusive offers from our branches.",
 
     "wa.defaultMsg": "Hello, I'd like to ask about Kitty Cat Clinic services",
     "wa.serviceMsg": "Hello, I'd like to book a session for:",
