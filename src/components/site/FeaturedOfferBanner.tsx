@@ -174,8 +174,8 @@ export function FeaturedOfferBanner({ offer, whatsapp }: Props) {
             style={{
               background:
                 dir === "rtl"
-                  ? "linear-gradient(270deg, hsl(var(--card)) 0%, hsl(var(--card) / 0.4) 30%, transparent 70%)"
-                  : "linear-gradient(90deg, hsl(var(--card)) 0%, hsl(var(--card) / 0.4) 30%, transparent 70%)",
+                  ? "linear-gradient(270deg, var(--card) 0%, color-mix(in oklab, var(--card) 40%, transparent) 30%, transparent 70%)"
+                  : "linear-gradient(90deg, var(--card) 0%, color-mix(in oklab, var(--card) 40%, transparent) 30%, transparent 70%)",
             }}
           />
           <div
@@ -183,7 +183,7 @@ export function FeaturedOfferBanner({ offer, whatsapp }: Props) {
             className="absolute inset-0 mix-blend-overlay"
             style={{
               background:
-                "linear-gradient(180deg, color-mix(in oklab, hsl(var(--primary)) 12%, transparent), color-mix(in oklab, hsl(var(--secondary)) 12%, transparent))",
+                "linear-gradient(180deg, color-mix(in oklab, var(--primary) 12%, transparent), color-mix(in oklab, var(--secondary) 12%, transparent))",
             }}
           />
 
