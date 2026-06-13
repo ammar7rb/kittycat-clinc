@@ -125,12 +125,12 @@ export function ProductCard({
         </div>
 
         {/* Actions */}
-        <div className="mt-5 flex gap-2">
+        <div className="mt-5">
           {whatsapp && product.stock > 0 ? (
             <Button
               asChild
               size="sm"
-              className="flex-1 bg-[color:var(--whatsapp)] text-[color:var(--whatsapp-foreground)] hover:opacity-90"
+              className="w-full bg-[color:var(--whatsapp)] text-[color:var(--whatsapp-foreground)] hover:opacity-90"
             >
               <a
                 href={buildWhatsAppUrl(whatsapp, waMsg)}
@@ -142,15 +142,10 @@ export function ProductCard({
               </a>
             </Button>
           ) : (
-            <Button size="sm" disabled className="flex-1">
+            <Button size="sm" disabled className="w-full">
               {lang === "ar" ? "غير متاح" : "Unavailable"}
             </Button>
           )}
-          <Button asChild size="sm" variant="outline">
-            <Link to="/shop/$productId" params={{ productId: product.id }}>
-              {t("common.details") || (lang === "ar" ? "تفاصيل" : "Details")}
-            </Link>
-          </Button>
         </div>
       </div>
     </article>
