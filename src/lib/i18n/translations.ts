@@ -98,6 +98,11 @@ export const translations = {
     "contact.hours": "ساعات العمل",
     "contact.openMaps": "افتح في الخرائط",
 
+    // Follow us
+    "follow.badge": "تابعنا",
+    "follow.title": "تابعنا على منصات التواصل",
+    "follow.subtitle": "تابع آخر الأخبار، النصائح البيطرية، والعروض الحصرية من فروعنا.",
+
     // WhatsApp
     "wa.defaultMsg": "السلام عليكم، أود الاستفسار عن خدمات Kitty Cat Clinic",
     "wa.serviceMsg": "السلام عليكم، أود حجز موعد لخدمة:",
