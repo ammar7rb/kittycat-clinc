@@ -9,6 +9,7 @@ export const translations = {
     // Nav
     "nav.home": "الرئيسية",
     "nav.services": "الخدمات",
+    "nav.shop": "المتجر",
     "nav.about": "من نحن",
     "nav.contact": "تواصل معنا",
     "nav.bookWhatsapp": "احجز عبر واتساب",
@@ -18,6 +19,7 @@ export const translations = {
     "common.bookNow": "احجز الآن",
     "common.contactUs": "تواصل معنا",
     "common.learnMore": "اعرف المزيد",
+    "common.details": "تفاصيل",
     "common.whatsapp": "واتساب",
     "common.call": "اتصال",
     "common.location": "الموقع",
@@ -124,6 +126,7 @@ export const translations = {
 
     "nav.home": "Home",
     "nav.services": "Services",
+    "nav.shop": "Shop",
     "nav.about": "About",
     "nav.contact": "Contact",
     "nav.bookWhatsapp": "Book on WhatsApp",
@@ -132,6 +135,7 @@ export const translations = {
     "common.bookNow": "Book now",
     "common.contactUs": "Contact us",
     "common.learnMore": "Learn more",
+    "common.details": "Details",
     "common.whatsapp": "WhatsApp",
     "common.call": "Call",
     "common.location": "Location",
