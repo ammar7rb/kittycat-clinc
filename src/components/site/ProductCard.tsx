@@ -13,7 +13,7 @@ export function ProductCard({
   whatsapp?: string | null;
   index?: number;
 }) {
-  const { t, lang } = useLanguage();
+  const { lang } = useLanguage();
   const pick = useLocalized();
   const name = pick(product, "name");
   const desc = pick(product, "description");
