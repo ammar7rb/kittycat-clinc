@@ -61,7 +61,12 @@ export function FeaturedOfferBanner({ offer, whatsapp }: Props) {
         <div
           aria-hidden
           className="pointer-events-none absolute -top-[10%] -left-[5%] w-64 h-64 rounded-full blur-[100px]"
-          style={{ background: "color-mix(in oklab, hsl(var(--primary)) 18%, transparent)" }}
+          style={{ background: "color-mix(in oklab, var(--primary) 18%, transparent)" }}
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -bottom-[10%] right-[20%] w-96 h-96 rounded-full blur-[120px]"
+          style={{ background: "color-mix(in oklab, var(--secondary) 12%, transparent)" }}
         />
         <div
           aria-hidden
