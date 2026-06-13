@@ -1,5 +1,4 @@
 import { MessageCircle, ShoppingBag, Cat, Dog, PawPrint } from "lucide-react";
-import { Link } from "@tanstack/react-router";
 import type { ProductRow } from "@/lib/queries";
 import { useLanguage, useLocalized } from "@/lib/i18n/LanguageProvider";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
