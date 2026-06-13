@@ -1,12 +1,11 @@
-import { MessageCircle, ShoppingBag, Cat, Dog, PawPrint } from "lucide-react";
+import { Instagram, ShoppingBag, Cat, Dog, PawPrint } from "lucide-react";
 import type { ProductRow } from "@/lib/queries";
 import { useLanguage, useLocalized } from "@/lib/i18n/LanguageProvider";
-import { buildWhatsAppUrl } from "@/lib/whatsapp";
+import { useSettings } from "@/lib/queries";
 import { Button } from "@/components/ui/button";
 
 export function ProductCard({
   product,
-  whatsapp,
   index = 0,
 }: {
   product: ProductRow;
@@ -15,6 +14,8 @@ export function ProductCard({
 }) {
   const { lang } = useLanguage();
   const pick = useLocalized();
+  const { data: settings } = useSettings();
+  const instagramUrl = settings?.instagram;
   const name = pick(product, "name");
   const desc = pick(product, "description");
   const hasDiscount =
@@ -26,11 +27,6 @@ export function ProductCard({
   const petIcon =
     product.pet_type === "dog" ? Dog : product.pet_type === "both" ? PawPrint : Cat;
   const PetIcon = petIcon;
-
-  const waMsg =
-    lang === "ar"
-      ? `السلام عليكم، أرغب في طلب: ${name} — السعر: ${product.price} ${product.currency}`
-      : `Hello, I'd like to order: ${name} — Price: ${product.price} ${product.currency}`;
 
   return (
     <article
@@ -125,18 +121,18 @@ export function ProductCard({
 
         {/* Actions */}
         <div className="mt-5">
-          {whatsapp && product.stock > 0 ? (
+          {instagramUrl && product.stock > 0 ? (
             <Button
               asChild
               size="sm"
-              className="w-full bg-[color:var(--whatsapp)] text-[color:var(--whatsapp-foreground)] hover:opacity-90"
+              className="w-full text-white hover:opacity-90"
+              style={{
+                background:
+                  "linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)",
+              }}
             >
-              <a
-                href={buildWhatsAppUrl(whatsapp, waMsg)}
-                target="_blank"
-                rel="noopener"
-              >
-                <MessageCircle className="h-4 w-4 me-1.5" />
+              <a href={instagramUrl} target="_blank" rel="noopener">
+                <Instagram className="h-4 w-4 me-1.5" />
                 {lang === "ar" ? "اطلب الآن" : "Order now"}
               </a>
             </Button>
