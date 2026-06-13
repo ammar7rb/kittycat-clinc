@@ -33,8 +33,9 @@ function HomePage() {
   const { t, lang } = useLanguage();
   const pick = useLocalized();
   const { data: branches } = useBranches();
-  const { data: services } = useServices(6);
+  const { data: services } = useServices();
   const { data: offers } = useOffers();
+  const featuredOffer = offers?.[0];
   const firstWa = branches?.[0]?.whatsapp;
 
   // Alternate icon palettes (teal / orange / teal / orange) for a balanced mix
@@ -110,6 +111,69 @@ function HomePage() {
         />
       </section>
 
+      {/* ============ FEATURED OFFER — single banner ============ */}
+      {featuredOffer && (
+        <section className="relative py-16 md:py-24">
+          <div className="container mx-auto px-4">
+            <SectionHeading
+              badge={
+                <>
+                  <Gift className="h-3 w-3" />
+                  {t("home.offers.title")}
+                </>
+              }
+              badgeTone="secondary"
+              titleLead={t("home.offers.title")}
+              subtitle={t("home.offers.subtitle")}
+              accentTone="secondary"
+            />
+          </div>
+
+          <div className="mt-12">
+            <FeaturedOfferBanner offer={featuredOffer} whatsapp={firstWa} />
+          </div>
+        </section>
+      )}
+
+      {/* ============ SERVICES — full grid, 4 columns ============ */}
+      <section
+        className="relative overflow-hidden py-16 md:py-24"
+        style={{
+          background:
+            "linear-gradient(180deg, color-mix(in oklab, var(--primary) 6%, var(--background)) 0%, var(--background) 100%)",
+        }}
+      >
+        <div className="pointer-events-none absolute -top-24 left-1/4 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
+        <div className="pointer-events-none absolute bottom-0 right-1/4 h-72 w-72 rounded-full bg-secondary/10 blur-3xl" />
+
+        <div className="container mx-auto px-4">
+          <SectionHeading
+            badge={
+              <>
+                <Stethoscope className="h-3 w-3" />
+                {t("home.services.title")}
+              </>
+            }
+            badgeTone="primary"
+            titleLead={t("home.services.title")}
+            subtitle={t("home.services.subtitle")}
+            accentTone="primary"
+          />
+
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {services?.map((s, i) => (
+              <ServiceCard
+                key={s.id}
+                service={s}
+                tone={i % 2 === 0 ? "primary" : "secondary"}
+                whatsapp={firstWa}
+                index={i}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ============ WHY US — light base + orange ambience + teal accents ============ */}
       <section className="relative overflow-hidden py-16 md:py-24">
         <div className="pointer-events-none absolute -top-20 right-10 h-72 w-72 rounded-full bg-secondary/10 blur-3xl" />
@@ -176,82 +240,6 @@ function HomePage() {
         </div>
       </section>
 
-      {/* ============ SERVICES — teal-tinted base + alternating tones ============ */}
-      <section
-        className="relative overflow-hidden py-16 md:py-24"
-        style={{
-          background:
-            "linear-gradient(180deg, color-mix(in oklab, var(--primary) 6%, var(--background)) 0%, var(--background) 100%)",
-        }}
-      >
-        <div className="pointer-events-none absolute -top-24 left-1/4 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
-        <div className="pointer-events-none absolute bottom-0 right-1/4 h-72 w-72 rounded-full bg-secondary/10 blur-3xl" />
-
-        <div className="container mx-auto px-4">
-          <SectionHeading
-            badge={
-              <>
-                <Stethoscope className="h-3 w-3" />
-                {t("home.services.title")}
-              </>
-            }
-            badgeTone="primary"
-            titleLead={t("home.services.title")}
-            subtitle={t("home.services.subtitle")}
-            accentTone="primary"
-          />
-
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {services?.map((s, i) => (
-              <ServiceCard
-                key={s.id}
-                service={s}
-                tone={i % 2 === 0 ? "primary" : "secondary"}
-                whatsapp={firstWa}
-                index={i}
-              />
-            ))}
-          </div>
-
-          <div className="mt-10 text-center">
-            <Button asChild variant="outline" size="lg">
-              <a href="/services">
-                {t("common.viewAll")}
-                <ArrowLeft className={`h-4 w-4 ms-2 ${lang === "en" ? "rotate-180" : ""}`} />
-              </a>
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* ============ OFFERS — full-width banners with countdown ============ */}
-      {offers && offers.length > 0 && (
-        <section className="relative py-16 md:py-24">
-          <div className="container mx-auto px-4">
-            <SectionHeading
-              badge={
-                <>
-                  <Gift className="h-3 w-3" />
-                  {t("home.offers.title")}
-                </>
-              }
-              badgeTone="secondary"
-              titleLead={t("home.offers.title")}
-              subtitle={t("home.offers.subtitle")}
-              accentTone="secondary"
-            />
-          </div>
-
-          <div className="mt-12 flex flex-col gap-10">
-            {offers.map((o) => (
-              <FeaturedOfferBanner key={o.id} offer={o} whatsapp={firstWa} />
-            ))}
-          </div>
-        </section>
-      )}
-
-
-
       {/* ============ Two-tone divider band ============ */}
       <div
         aria-hidden
@@ -261,6 +249,7 @@ function HomePage() {
             "linear-gradient(90deg, var(--primary) 0%, var(--primary-glow) 35%, var(--secondary-glow) 65%, var(--secondary) 100%)",
         }}
       />
+
 
       {/* ============ BRANCHES — warm orange base + teal cards ============ */}
       <section
