@@ -33,8 +33,9 @@ function HomePage() {
   const { t, lang } = useLanguage();
   const pick = useLocalized();
   const { data: branches } = useBranches();
-  const { data: services } = useServices(6);
+  const { data: services } = useServices();
   const { data: offers } = useOffers();
+  const featuredOffer = offers?.[0];
   const firstWa = branches?.[0]?.whatsapp;
 
   // Alternate icon palettes (teal / orange / teal / orange) for a balanced mix
