@@ -1,12 +1,11 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, MessageCircle, ShoppingBag, Cat, Dog, PawPrint } from "lucide-react";
+import { ArrowLeft, Instagram, ShoppingBag, Cat, Dog, PawPrint } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { useLanguage, useLocalized } from "@/lib/i18n/LanguageProvider";
 import { supabase } from "@/integrations/supabase/client";
-import { useBranches } from "@/lib/queries";
+import { useSettings } from "@/lib/queries";
 import type { ProductRow } from "@/lib/queries";
 import { Button } from "@/components/ui/button";
-import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { useQuery } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/shop/$productId")({
