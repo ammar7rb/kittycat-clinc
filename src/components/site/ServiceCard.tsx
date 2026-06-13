@@ -8,6 +8,9 @@ import {
   Heart,
   ShieldCheck,
   Cat,
+  Smile,
+  FlaskConical,
+  Apple,
   MessageCircle,
   type LucideIcon,
 } from "lucide-react";
@@ -25,18 +28,24 @@ const ICONS: Record<string, LucideIcon> = {
   Heart,
   ShieldCheck,
   Cat,
+  Smile,
+  FlaskConical,
+  Apple,
 };
 
 const CATEGORIES: Record<string, string> = {
-  Stethoscope: "CLINIC",
-  Syringe: "SAFETY",
-  Sparkles: "DENTAL",
+  Stethoscope: "EXAM",
+  Syringe: "VACCINES",
+  Sparkles: "GROOMING",
   Scissors: "SURGERY",
   Activity: "IMAGING",
   Home: "BOARDING",
   Heart: "NUTRITION",
   ShieldCheck: "PREVENT",
   Cat: "BEHAVIOR",
+  Smile: "DENTAL",
+  FlaskConical: "LAB",
+  Apple: "NUTRITION",
 };
 
 type Props = {
