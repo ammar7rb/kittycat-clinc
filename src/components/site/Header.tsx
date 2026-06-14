@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useBranches, useSettings } from "@/lib/queries";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
+import brandLogoAsset from "@/assets/kitty-cat-clinic-logo.png.asset.json";
 
 export function Header() {
   const { t, toggleLang, lang } = useLanguage();
@@ -15,7 +16,7 @@ export function Header() {
   const { data: branches } = useBranches();
   const { data: settings } = useSettings();
   const waNumber = settings?.whatsapp || branches?.[0]?.whatsapp || "";
-  const logoUrl = settings?.logo_url || "";
+  const logoUrl = settings?.logo_url || brandLogoAsset.url;
 
 
   const nav = [
