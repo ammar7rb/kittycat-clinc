@@ -145,6 +145,25 @@ const SECTIONS: { title: string; items: SettingDef[] }[] = [
       },
     ],
   },
+  {
+    title: "متغيرات الأزرار (روابط)",
+    items: [
+      {
+        key: "settings.instagram_order_url",
+        label: 'رابط زر "اطلب الآن" (رسائل إنستجرام)',
+        type: "url",
+        placeholder: "https://ig.me/m/your_username",
+        icon: Instagram,
+      },
+      {
+        key: "settings.instagram_learn_more_url",
+        label: 'رابط زر "اعرف المزيد" (رسائل إنستجرام)',
+        type: "url",
+        placeholder: "https://ig.me/m/your_username",
+        icon: Instagram,
+      },
+    ],
+  },
 ];
 
 function SettingsPage() {
