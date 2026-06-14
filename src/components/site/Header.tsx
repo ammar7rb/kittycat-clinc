@@ -28,7 +28,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/70">
-      <div className="container mx-auto flex h-16 items-center justify-between gap-4 px-4">
+      <div className="container mx-auto flex h-20 items-center justify-between gap-4 px-4">
         {/* Logo */}
         <Link to="/" className="flex items-center shrink-0" aria-label={t("brand.name")}>
           <img
