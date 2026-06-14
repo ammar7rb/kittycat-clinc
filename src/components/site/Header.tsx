@@ -28,13 +28,13 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/70">
-      <div className="container mx-auto flex h-[72px] sm:h-20 md:h-24 items-center justify-between gap-4 px-4">
+      <div className="container mx-auto flex h-[68px] items-center justify-between gap-4 px-4">
         {/* Logo */}
         <Link to="/" className="flex items-center shrink-0" aria-label={t("brand.name")}>
           <img
             src={logoUrl}
             alt={t("brand.name")}
-            className="h-14 w-auto sm:h-[68px] md:h-20 object-contain drop-shadow-sm"
+            className="h-14 w-auto max-w-[200px] sm:max-w-[280px] md:max-w-[360px] object-contain drop-shadow-sm"
           />
         </Link>
 
