@@ -28,8 +28,10 @@ export const translations = {
     "common.chooseBranchToBook": "اختر الفرع للحجز",
     "common.loading": "جاري التحميل...",
     "common.getToKnow": "تعرف علينا",
+    "common.followUs": "تابعنا",
     "common.followOnInstagram": "تابعنا على إنستغرام",
     "common.followOnTiktok": "تابعنا على تيك توك",
+    "common.close": "إغلاق",
 
     // Home
     "home.hero.titleLead": "رعاية متخصصة لقطتك",
