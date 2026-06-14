@@ -15,7 +15,7 @@ export function ProductCard({
   const { lang } = useLanguage();
   const pick = useLocalized();
   const { data: settings } = useSettings();
-  const instagramUrl = settings?.instagram;
+  const instagramUrl = settings?.instagram_order_url || settings?.instagram;
   const name = pick(product, "name");
   const desc = pick(product, "description");
   const hasDiscount =
