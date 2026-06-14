@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { MessageCircle, Sparkles, Heart, ShieldCheck, MapPin, Phone, ArrowLeft, Cat, Gift, Stethoscope, Instagram, Music2, ChevronDown } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
