@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useBranches, useSettings } from "@/lib/queries";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
+import brandLogoAsset from "@/assets/kitty-cat-clinic-logo.png.asset.json";
 
 export function Header() {
   const { t, toggleLang, lang } = useLanguage();
@@ -15,7 +16,7 @@ export function Header() {
   const { data: branches } = useBranches();
   const { data: settings } = useSettings();
   const waNumber = settings?.whatsapp || branches?.[0]?.whatsapp || "";
-  const logoUrl = settings?.logo_url || "";
+  const logoUrl = settings?.logo_url || brandLogoAsset.url;
 
 
   const nav = [
@@ -27,28 +28,16 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/70">
-      <div className="container mx-auto flex h-16 items-center justify-between gap-4 px-4">
+      <div className="container mx-auto flex h-20 items-center justify-between gap-4 px-4">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2">
-          {logoUrl ? (
-            <img
-              src={logoUrl}
-              alt={t("brand.name")}
-              className="h-10 w-10 rounded-xl object-cover shadow-[var(--shadow-soft)]"
-            />
-          ) : (
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary-glow text-primary-foreground shadow-[var(--shadow-soft)]">
-              <span className="text-lg font-extrabold">K</span>
-            </div>
-          )}
-
-          <div className="hidden sm:block leading-tight">
-            <div className="text-sm font-extrabold tracking-tight text-foreground">
-              {t("brand.name")}
-            </div>
-            <div className="text-[11px] text-muted-foreground">{t("brand.tagline")}</div>
-          </div>
+        <Link to="/" className="flex items-center shrink-0" aria-label={t("brand.name")}>
+          <img
+            src={logoUrl}
+            alt={t("brand.name")}
+            className="h-12 w-auto sm:h-14 md:h-16 object-contain"
+          />
         </Link>
+
 
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-1">
