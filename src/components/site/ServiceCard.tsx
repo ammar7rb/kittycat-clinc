@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import {
   Stethoscope,
   Syringe,
@@ -12,9 +13,10 @@ import {
   FlaskConical,
   Apple,
   MessageCircle,
+  MapPin,
   type LucideIcon,
 } from "lucide-react";
-import { ServiceRow } from "@/lib/queries";
+import { BranchRow, ServiceRow } from "@/lib/queries";
 import { useLanguage, useLocalized } from "@/lib/i18n/LanguageProvider";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 
@@ -51,11 +53,11 @@ const CATEGORIES: Record<string, string> = {
 type Props = {
   service: ServiceRow;
   tone?: "primary" | "secondary";
-  whatsapp?: string | null;
+  branches?: BranchRow[];
   index?: number;
 };
 
-export function ServiceCard({ service, tone = "primary", whatsapp, index = 0 }: Props) {
+export function ServiceCard({ service, tone = "primary", branches, index = 0 }: Props) {
   const pick = useLocalized();
   const { t } = useLanguage();
   const Icon = (service.icon && ICONS[service.icon]) || Stethoscope;
@@ -65,6 +67,26 @@ export function ServiceCard({ service, tone = "primary", whatsapp, index = 0 }: 
 
   const accent = isOrange ? "var(--secondary)" : "var(--primary)";
   const gradient = isOrange ? "var(--gradient-secondary)" : "var(--gradient-primary)";
+
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const availableBranches = (branches ?? []).filter((b) => b.whatsapp);
+
+  useEffect(() => {
+    if (!open) return;
+    function onDown(e: MouseEvent) {
+      if (!rootRef.current?.contains(e.target as Node)) setOpen(false);
+    }
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
+    document.addEventListener("mousedown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
 
   return (
     <article
@@ -121,17 +143,15 @@ export function ServiceCard({ service, tone = "primary", whatsapp, index = 0 }: 
       )}
 
       {/* Action */}
-      {whatsapp && (
-        <div className="mt-auto pt-8">
-          <a
-            href={buildWhatsAppUrl(whatsapp, `${t("wa.serviceMsg")} ${pick(service, "name")}`)}
-            target="_blank"
-            rel="noopener"
+      {availableBranches.length > 0 && (
+        <div ref={rootRef} className="relative mt-auto pt-8">
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            aria-haspopup="menu"
+            aria-expanded={open}
             className="group/btn inline-flex w-full items-center justify-center gap-3 rounded-2xl border-2 px-6 py-4 font-bold transition-all duration-300"
-            style={{
-              borderColor: accent,
-              color: accent,
-            }}
+            style={{ borderColor: accent, color: accent }}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = accent;
               e.currentTarget.style.color = "white";
@@ -143,7 +163,40 @@ export function ServiceCard({ service, tone = "primary", whatsapp, index = 0 }: 
           >
             <span>{t("common.bookNow")}</span>
             <MessageCircle className="h-5 w-5 transition-transform group-hover/btn:scale-110" />
-          </a>
+          </button>
+
+          {open && (
+            <div
+              role="menu"
+              className="absolute bottom-full left-1/2 z-30 mb-3 w-[260px] -translate-x-1/2 rounded-2xl border border-border bg-card/90 p-3 shadow-[var(--shadow-elegant)] backdrop-blur-xl animate-in fade-in zoom-in-95"
+            >
+              <div className="mb-2 px-2 text-xs font-bold text-muted-foreground">
+                {t("common.chooseBranchToBook")}
+              </div>
+              <ul className="space-y-1.5">
+                {availableBranches.map((b) => (
+                  <li key={b.id}>
+                    <a
+                      href={buildWhatsAppUrl(
+                        b.whatsapp ?? "",
+                        `${t("wa.serviceMsg")} ${pick(service, "name")}`,
+                      )}
+                      target="_blank"
+                      rel="noopener"
+                      onClick={() => setOpen(false)}
+                      className="flex items-center justify-between gap-2 rounded-xl border border-border bg-background px-3 py-2.5 text-sm font-medium transition-all hover:border-[color:var(--whatsapp)] hover:bg-accent"
+                    >
+                      <span className="flex items-center gap-2 text-foreground">
+                        <MapPin className="h-4 w-4 text-muted-foreground" />
+                        {pick(b, "name")}
+                      </span>
+                      <MessageCircle className="h-4 w-4 text-[color:var(--whatsapp)]" />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       )}
     </article>

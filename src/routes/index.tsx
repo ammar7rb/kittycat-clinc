@@ -1,5 +1,6 @@
+import { useEffect, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { MessageCircle, Sparkles, Heart, ShieldCheck, MapPin, Phone, ArrowLeft, Cat, Gift, Stethoscope } from "lucide-react";
+import { MessageCircle, Sparkles, Heart, ShieldCheck, MapPin, Phone, ArrowLeft, Cat, Gift, Stethoscope, Instagram, Music2, ChevronDown } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { SectionHeading } from "@/components/site/SectionHeading";
 import { ServiceCard } from "@/components/site/ServiceCard";
@@ -38,8 +39,28 @@ function HomePage() {
   const { data: settings } = useSettings();
   const featuredOffer = offers?.[0];
   const firstWa = branches?.[0]?.whatsapp;
-  const learnMoreUrl = settings?.instagram_learn_more_url || settings?.instagram || "/services";
-  const learnMoreExternal = /^https?:\/\//i.test(learnMoreUrl);
+  const instagramUrl = settings?.instagram || "";
+  const tiktokUrl = settings?.tiktok || "";
+  const hasSocial = !!(instagramUrl || tiktokUrl);
+
+  // Hero "Get to know us" dropdown
+  const [introOpen, setIntroOpen] = useState(false);
+  const introRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!introOpen) return;
+    const onDown = (e: MouseEvent) => {
+      if (!introRef.current?.contains(e.target as Node)) setIntroOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIntroOpen(false);
+    };
+    document.addEventListener("mousedown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [introOpen]);
 
   // Alternate icon palettes (teal / orange / teal / orange) for a balanced mix
   const features = [
@@ -76,21 +97,63 @@ function HomePage() {
             </p>
 
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-              {firstWa && (
-                <Button
-                  asChild
-                  size="lg"
-                  className="bg-gradient-to-r from-secondary to-secondary-glow text-secondary-foreground shadow-[var(--shadow-elegant)] hover:opacity-95"
-                >
-                  <a
-                    href={buildWhatsAppUrl(firstWa, t("wa.defaultMsg"))}
-                    target="_blank"
-                    rel="noopener"
+              {hasSocial && (
+                <div ref={introRef} className="relative">
+                  <Button
+                    type="button"
+                    size="lg"
+                    onClick={() => setIntroOpen((v) => !v)}
+                    aria-haspopup="menu"
+                    aria-expanded={introOpen}
+                    className="bg-gradient-to-r from-secondary to-secondary-glow text-secondary-foreground shadow-[var(--shadow-elegant)] hover:opacity-95"
                   >
-                    <MessageCircle className="h-5 w-5 me-2" />
-                    {t("nav.bookWhatsapp")}
-                  </a>
-                </Button>
+                    <Sparkles className="h-5 w-5 me-2" />
+                    {t("common.getToKnow")}
+                    <ChevronDown className={`h-4 w-4 ms-2 transition-transform ${introOpen ? "rotate-180" : ""}`} />
+                  </Button>
+
+                  {introOpen && (
+                    <div
+                      role="menu"
+                      className="absolute left-1/2 top-full z-30 mt-3 w-[260px] -translate-x-1/2 rounded-2xl border border-white/30 bg-white/15 p-3 shadow-[var(--shadow-elegant)] backdrop-blur-xl animate-in fade-in zoom-in-95"
+                    >
+                      <ul className="space-y-2">
+                        {instagramUrl && (
+                          <li>
+                            <a
+                              href={instagramUrl}
+                              target="_blank"
+                              rel="noopener"
+                              onClick={() => setIntroOpen(false)}
+                              className="flex items-center gap-3 rounded-xl border border-white/20 bg-white/90 px-3 py-2.5 text-sm font-bold text-foreground transition-all hover:bg-white"
+                            >
+                              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-tr from-[#f58529] via-[#dd2a7b] to-[#8134af] text-white">
+                                <Instagram className="h-4 w-4" />
+                              </span>
+                              <span className="flex-1 text-start">{t("common.followOnInstagram")}</span>
+                            </a>
+                          </li>
+                        )}
+                        {tiktokUrl && (
+                          <li>
+                            <a
+                              href={tiktokUrl}
+                              target="_blank"
+                              rel="noopener"
+                              onClick={() => setIntroOpen(false)}
+                              className="flex items-center gap-3 rounded-xl border border-white/20 bg-white/90 px-3 py-2.5 text-sm font-bold text-foreground transition-all hover:bg-white"
+                            >
+                              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-foreground text-background">
+                                <Music2 className="h-4 w-4" />
+                              </span>
+                              <span className="flex-1 text-start">{t("common.followOnTiktok")}</span>
+                            </a>
+                          </li>
+                        )}
+                      </ul>
+                    </div>
+                  )}
+                </div>
               )}
               <Button
                 asChild
@@ -98,10 +161,7 @@ function HomePage() {
                 variant="outline"
                 className="border-white/50 bg-white/10 text-white backdrop-blur hover:bg-white/20"
               >
-                <a
-                  href={learnMoreUrl}
-                  {...(learnMoreExternal ? { target: "_blank", rel: "noopener" } : {})}
-                >
+                <a href="#services">
                   {t("common.learnMore")}
                   <ArrowLeft className={`h-4 w-4 ms-2 ${lang === "en" ? "rotate-180" : ""}`} />
                 </a>
@@ -143,7 +203,8 @@ function HomePage() {
 
       {/* ============ SERVICES — full grid, 4 columns ============ */}
       <section
-        className="relative overflow-hidden py-16 md:py-24"
+        id="services"
+        className="relative overflow-hidden scroll-mt-24 py-16 md:py-24"
         style={{
           background:
             "linear-gradient(180deg, color-mix(in oklab, var(--primary) 6%, var(--background)) 0%, var(--background) 100%)",
@@ -172,7 +233,7 @@ function HomePage() {
                 key={s.id}
                 service={s}
                 tone={i % 2 === 0 ? "primary" : "secondary"}
-                whatsapp={firstWa}
+                branches={branches}
                 index={i}
               />
             ))}

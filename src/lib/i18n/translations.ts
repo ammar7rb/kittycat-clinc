@@ -25,7 +25,11 @@ export const translations = {
     "common.location": "الموقع",
     "common.workingHours": "ساعات العمل",
     "common.chooseBranch": "اختر الفرع",
+    "common.chooseBranchToBook": "اختر الفرع للحجز",
     "common.loading": "جاري التحميل...",
+    "common.getToKnow": "تعرف علينا",
+    "common.followOnInstagram": "تابعنا على إنستغرام",
+    "common.followOnTiktok": "تابعنا على تيك توك",
 
     // Home
     "home.hero.titleLead": "رعاية متخصصة لقطتك",
@@ -141,7 +145,11 @@ export const translations = {
     "common.location": "Location",
     "common.workingHours": "Working hours",
     "common.chooseBranch": "Choose a branch",
+    "common.chooseBranchToBook": "Choose a branch to book",
     "common.loading": "Loading...",
+    "common.getToKnow": "Get to know us",
+    "common.followOnInstagram": "Follow us on Instagram",
+    "common.followOnTiktok": "Follow us on TikTok",
 
     "home.hero.titleLead": "Expert care for your cat,",
     "home.hero.titleAccent": "with heart and precision",
