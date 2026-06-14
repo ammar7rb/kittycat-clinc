@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { MessageCircle, ShieldCheck } from "lucide-react";
+import { MessageCircle, ShieldCheck, Instagram } from "lucide-react";
 import { OfferRow } from "@/lib/queries";
 import { useLanguage, useLocalized } from "@/lib/i18n/LanguageProvider";
-import { buildWhatsAppUrl } from "@/lib/whatsapp";
+import { useSettings } from "@/lib/queries";
 
 type Props = {
   offer: OfferRow;
@@ -30,9 +30,11 @@ function computeTimeLeft(end: string | null): TimeLeft {
   };
 }
 
-export function FeaturedOfferBanner({ offer, whatsapp }: Props) {
+export function FeaturedOfferBanner({ offer }: Props) {
   const pick = useLocalized();
   const { t, dir } = useLanguage();
+  const { data: settings } = useSettings();
+  const bookUrl = settings?.instagram_order_url || "https://ig.me/m/kitty.cat.clinic";
   const [time, setTime] = useState<TimeLeft>(() => computeTimeLeft(offer.end_date));
 
   useEffect(() => {
@@ -132,19 +134,17 @@ export function FeaturedOfferBanner({ offer, whatsapp }: Props) {
           )}
 
           {/* CTA */}
-          {whatsapp && (
-            <div className="flex items-center gap-6 flex-wrap">
-              <a
-                href={buildWhatsAppUrl(whatsapp, `${t("wa.offerMsg")} ${title}`)}
-                target="_blank"
-                rel="noopener"
-                className="group inline-flex items-center gap-3 rounded-2xl bg-gradient-to-r from-secondary to-secondary-glow px-8 py-4 text-lg font-black text-secondary-foreground shadow-[var(--shadow-elegant)] transition-all hover:scale-105 active:scale-95"
-              >
-                <MessageCircle className="h-6 w-6" />
-                {t("common.bookNow")}
-              </a>
-            </div>
-          )}
+          <div className="flex items-center gap-6 flex-wrap">
+            <a
+              href={bookUrl}
+              target="_blank"
+              rel="noopener"
+              className="group inline-flex items-center gap-3 rounded-2xl bg-gradient-to-r from-secondary to-secondary-glow px-8 py-4 text-lg font-black text-secondary-foreground shadow-[var(--shadow-elegant)] transition-all hover:scale-105 active:scale-95"
+            >
+              <Instagram className="h-6 w-6" />
+              {t("common.bookNow")}
+            </a>
+          </div>
         </div>
 
         {/* Image Column */}
