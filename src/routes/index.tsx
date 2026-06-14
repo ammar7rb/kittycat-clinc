@@ -105,66 +105,6 @@ function HomePage() {
                     {t("common.getToKnow")}
                   </Button>
 
-                  {introOpen && (
-                    <>
-                      {/* Backdrop */}
-                      <div
-                        className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
-                        onClick={() => setIntroOpen(false)}
-                      />
-                      {/* Centered modal card */}
-                      <div
-                        role="dialog"
-                        className="fixed left-1/2 top-1/2 z-50 w-[320px] -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-border bg-card p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200"
-                      >
-                        <h3 className="text-center text-lg font-bold text-foreground">
-                          {t("common.followUs")}
-                        </h3>
-                        <div className="mt-5 space-y-3">
-                          {instagramUrl && (
-                            <a
-                              href={instagramUrl}
-                              target="_blank"
-                              rel="noopener"
-                              onClick={() => setIntroOpen(false)}
-                              className="flex items-center gap-4 rounded-xl bg-gradient-to-r from-[#f58529] via-[#dd2a7b] to-[#8134af] px-5 py-3.5 text-white shadow-lg transition-transform hover:scale-[1.02]"
-                            >
-                              <Instagram className="h-6 w-6 shrink-0" />
-                              <span className="flex-1 text-start text-sm font-bold">
-                                {t("common.followOnInstagram")}
-                              </span>
-                            </a>
-                          )}
-                          {tiktokUrl && (
-                            <a
-                              href={tiktokUrl}
-                              target="_blank"
-                              rel="noopener"
-                              onClick={() => setIntroOpen(false)}
-                              className="flex items-center gap-4 rounded-xl bg-[#010101] px-5 py-3.5 text-white shadow-lg transition-transform hover:scale-[1.02]"
-                            >
-                              <svg
-                                className="h-6 w-6 shrink-0"
-                                viewBox="0 0 24 24"
-                                fill="currentColor"
-                              >
-                                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
-                              </svg>
-                              <span className="flex-1 text-start text-sm font-bold">
-                                {t("common.followOnTiktok")}
-                              </span>
-                            </a>
-                          )}
-                        </div>
-                        <button
-                          onClick={() => setIntroOpen(false)}
-                          className="mt-5 block w-full rounded-lg border border-border bg-muted py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-muted/80"
-                        >
-                          {t("common.close")}
-                        </button>
-                      </div>
-                    </>
-                  )}
                 </>
               )}
               <Button
@@ -421,6 +361,63 @@ function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Modal placed outside hero to avoid overflow-hidden clipping */}
+      {introOpen && (
+        <>
+          <div
+            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
+            onClick={() => setIntroOpen(false)}
+          />
+          <div
+            role="dialog"
+            className="fixed left-1/2 top-1/2 z-[60] w-[320px] -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-border bg-card p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200"
+          >
+            <div className="space-y-3">
+              {instagramUrl && (
+                <a
+                  href={instagramUrl}
+                  target="_blank"
+                  rel="noopener"
+                  onClick={() => setIntroOpen(false)}
+                  className="flex items-center gap-4 rounded-xl bg-gradient-to-r from-[#f58529] via-[#dd2a7b] to-[#8134af] px-5 py-3.5 text-white shadow-lg transition-transform hover:scale-[1.02]"
+                >
+                  <Instagram className="h-6 w-6 shrink-0" />
+                  <span className="flex-1 text-start text-sm font-bold">
+                    {t("common.followOnInstagram")}
+                  </span>
+                </a>
+              )}
+              {tiktokUrl && (
+                <a
+                  href={tiktokUrl}
+                  target="_blank"
+                  rel="noopener"
+                  onClick={() => setIntroOpen(false)}
+                  className="flex items-center gap-4 rounded-xl bg-[#010101] px-5 py-3.5 text-white shadow-lg transition-transform hover:scale-[1.02]"
+                >
+                  <svg
+                    className="h-6 w-6 shrink-0"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
+                  </svg>
+                  <span className="flex-1 text-start text-sm font-bold">
+                    {t("common.followOnTiktok")}
+                  </span>
+                </a>
+              )}
+            </div>
+            <button
+              onClick={() => setIntroOpen(false)}
+              className="mt-5 block w-full rounded-lg border border-border bg-muted py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-muted/80"
+            >
+              {t("common.close")}
+            </button>
+          </div>
+        </>
+      )}
     </SiteLayout>
   );
 }
