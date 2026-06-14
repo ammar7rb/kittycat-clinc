@@ -43,21 +43,15 @@ function HomePage() {
   const tiktokUrl = settings?.tiktok || "";
   const hasSocial = !!(instagramUrl || tiktokUrl);
 
-  // Hero "Get to know us" dropdown
+  // Hero "Get to know us" modal
   const [introOpen, setIntroOpen] = useState(false);
-  const introRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!introOpen) return;
-    const onDown = (e: MouseEvent) => {
-      if (!introRef.current?.contains(e.target as Node)) setIntroOpen(false);
-    };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setIntroOpen(false);
     };
-    document.addEventListener("mousedown", onDown);
     document.addEventListener("keydown", onKey);
     return () => {
-      document.removeEventListener("mousedown", onDown);
       document.removeEventListener("keydown", onKey);
     };
   }, [introOpen]);
