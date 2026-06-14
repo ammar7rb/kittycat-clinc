@@ -34,7 +34,7 @@ function ProductDetailPage() {
   const { lang } = useLanguage();
   const pick = useLocalized();
   const { data: settings } = useSettings();
-  const instagramUrl = settings?.instagram;
+  const instagramUrl = settings?.instagram_order_url || settings?.instagram;
 
   const { data: product, isLoading } = useQuery({
     queryKey: ["product", productId],

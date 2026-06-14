@@ -5,7 +5,7 @@ import { SectionHeading } from "@/components/site/SectionHeading";
 import { ServiceCard } from "@/components/site/ServiceCard";
 import { FeaturedOfferBanner } from "@/components/site/FeaturedOfferBanner";
 import { useLanguage, useLocalized } from "@/lib/i18n/LanguageProvider";
-import { useBranches, useServices, useOffers } from "@/lib/queries";
+import { useBranches, useServices, useOffers, useSettings } from "@/lib/queries";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { Button } from "@/components/ui/button";
 
@@ -17,7 +17,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "أول عيادة بيطرية في جدة متخصصة حصريًا في القطط. خدمات طبية متكاملة، فريق خبير، ثلاثة فروع: الرقام، الصنب، الرحبة.",
+          "أول عيادة بيطرية في جدة متخصصة حصريًا في القطط. خدمات طبية متكاملة، فريق خبير، ثلاثة فروع: الرغامة، السنابل، الرحاب.",
       },
       { property: "og:title", content: "Kitty Cat Clinic" },
       { property: "og:description", content: "رعاية متخصصة لقطتك بكل حب واحتراف." },
@@ -35,8 +35,11 @@ function HomePage() {
   const { data: branches } = useBranches();
   const { data: services } = useServices();
   const { data: offers } = useOffers();
+  const { data: settings } = useSettings();
   const featuredOffer = offers?.[0];
   const firstWa = branches?.[0]?.whatsapp;
+  const learnMoreUrl = settings?.instagram_learn_more_url || settings?.instagram || "/services";
+  const learnMoreExternal = /^https?:\/\//i.test(learnMoreUrl);
 
   // Alternate icon palettes (teal / orange / teal / orange) for a balanced mix
   const features = [
@@ -95,7 +98,10 @@ function HomePage() {
                 variant="outline"
                 className="border-white/50 bg-white/10 text-white backdrop-blur hover:bg-white/20"
               >
-                <a href="/services">
+                <a
+                  href={learnMoreUrl}
+                  {...(learnMoreExternal ? { target: "_blank", rel: "noopener" } : {})}
+                >
                   {t("common.learnMore")}
                   <ArrowLeft className={`h-4 w-4 ms-2 ${lang === "en" ? "rotate-180" : ""}`} />
                 </a>
