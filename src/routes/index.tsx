@@ -13,11 +13,11 @@ import { Button } from "@/components/ui/button";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Kitty Cat Clinic — عيادة بيطرية متخصصة في القطط | الإمارات" },
+      { title: "Kitty Cat Clinic — عيادة بيطرية متخصصة في القطط | السعودية" },
       {
         name: "description",
         content:
-          "أول عيادة بيطرية في الإمارات متخصصة حصريًا في القطط. خدمات طبية متكاملة، فريق خبير، ثلاثة فروع: الرقام، الصنب، الرحبة.",
+          "أول عيادة بيطرية في جدة متخصصة حصريًا في القطط. خدمات طبية متكاملة، فريق خبير، ثلاثة فروع: الرقام، الصنب، الرحبة.",
       },
       { property: "og:title", content: "Kitty Cat Clinic" },
       { property: "og:description", content: "رعاية متخصصة لقطتك بكل حب واحتراف." },
