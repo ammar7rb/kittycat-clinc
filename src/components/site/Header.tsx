@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useBranches, useSettings } from "@/lib/queries";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
-import brandLogoAsset from "@/assets/kitty-cat-clinic-logo.png.asset.json";
+import brandIconAsset from "@/assets/kitty-icon.png.asset.json";
 
 export function Header() {
   const { t, toggleLang, lang } = useLanguage();
@@ -16,7 +16,7 @@ export function Header() {
   const { data: branches } = useBranches();
   const { data: settings } = useSettings();
   const waNumber = settings?.whatsapp || branches?.[0]?.whatsapp || "";
-  const logoUrl = settings?.logo_url || brandLogoAsset.url;
+  const iconUrl = settings?.logo_url || brandIconAsset.url;
 
 
   const nav = [
@@ -30,13 +30,24 @@ export function Header() {
     <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/70">
       <div className="container mx-auto flex h-[68px] items-center justify-between gap-4 px-4">
         {/* Logo */}
-        <Link to="/" className="flex items-center shrink-0" aria-label={t("brand.name")}>
-          <img
-            src={logoUrl}
-            alt={t("brand.name")}
-            className="h-14 w-auto max-w-[200px] sm:max-w-[280px] md:max-w-[360px] object-contain drop-shadow-sm"
-          />
+        <Link to="/" className="flex items-center gap-3 shrink-0" aria-label={t("brand.name")}>
+          <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/15 to-primary/5 ring-1 ring-primary/30 p-1.5 shrink-0">
+            <img
+              src={iconUrl}
+              alt={t("brand.name")}
+              className="h-full w-full object-contain"
+            />
+          </div>
+          <div className="flex flex-col leading-tight">
+            <span className="text-sm sm:text-base font-bold text-foreground whitespace-nowrap">
+              Kitty Cat Clinic
+            </span>
+            <span className="text-[11px] sm:text-xs text-muted-foreground whitespace-nowrap">
+              عيادات كيتي كات
+            </span>
+          </div>
         </Link>
+
 
 
         {/* Desktop nav */}
