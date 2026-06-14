@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { MessageCircle, Sparkles, Heart, ShieldCheck, MapPin, Phone, ArrowLeft, Cat, Gift, Stethoscope, Instagram, Music2, ChevronDown } from "lucide-react";
+import { MessageCircle, Sparkles, Heart, ShieldCheck, MapPin, Phone, ArrowLeft, Cat, Gift, Stethoscope, Instagram } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { SectionHeading } from "@/components/site/SectionHeading";
 import { ServiceCard } from "@/components/site/ServiceCard";
@@ -43,21 +43,15 @@ function HomePage() {
   const tiktokUrl = settings?.tiktok || "";
   const hasSocial = !!(instagramUrl || tiktokUrl);
 
-  // Hero "Get to know us" dropdown
+  // Hero "Get to know us" modal
   const [introOpen, setIntroOpen] = useState(false);
-  const introRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!introOpen) return;
-    const onDown = (e: MouseEvent) => {
-      if (!introRef.current?.contains(e.target as Node)) setIntroOpen(false);
-    };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setIntroOpen(false);
     };
-    document.addEventListener("mousedown", onDown);
     document.addEventListener("keydown", onKey);
     return () => {
-      document.removeEventListener("mousedown", onDown);
       document.removeEventListener("keydown", onKey);
     };
   }, [introOpen]);
@@ -98,62 +92,80 @@ function HomePage() {
 
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
               {hasSocial && (
-                <div ref={introRef} className="relative">
+                <>
                   <Button
                     type="button"
                     size="lg"
-                    onClick={() => setIntroOpen((v) => !v)}
-                    aria-haspopup="menu"
+                    onClick={() => setIntroOpen(true)}
+                    aria-haspopup="dialog"
                     aria-expanded={introOpen}
                     className="bg-gradient-to-r from-secondary to-secondary-glow text-secondary-foreground shadow-[var(--shadow-elegant)] hover:opacity-95"
                   >
                     <Sparkles className="h-5 w-5 me-2" />
                     {t("common.getToKnow")}
-                    <ChevronDown className={`h-4 w-4 ms-2 transition-transform ${introOpen ? "rotate-180" : ""}`} />
                   </Button>
 
                   {introOpen && (
-                    <div
-                      role="menu"
-                      className="absolute left-1/2 top-full z-30 mt-3 w-[260px] -translate-x-1/2 rounded-2xl border border-white/30 bg-white/15 p-3 shadow-[var(--shadow-elegant)] backdrop-blur-xl animate-in fade-in zoom-in-95"
-                    >
-                      <ul className="space-y-2">
-                        {instagramUrl && (
-                          <li>
+                    <>
+                      {/* Backdrop */}
+                      <div
+                        className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
+                        onClick={() => setIntroOpen(false)}
+                      />
+                      {/* Centered modal card */}
+                      <div
+                        role="dialog"
+                        className="fixed left-1/2 top-1/2 z-50 w-[320px] -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-border bg-card p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200"
+                      >
+                        <h3 className="text-center text-lg font-bold text-foreground">
+                          {t("common.followUs")}
+                        </h3>
+                        <div className="mt-5 space-y-3">
+                          {instagramUrl && (
                             <a
                               href={instagramUrl}
                               target="_blank"
                               rel="noopener"
                               onClick={() => setIntroOpen(false)}
-                              className="flex items-center gap-3 rounded-xl border border-white/20 bg-white/90 px-3 py-2.5 text-sm font-bold text-foreground transition-all hover:bg-white"
+                              className="flex items-center gap-4 rounded-xl bg-gradient-to-r from-[#f58529] via-[#dd2a7b] to-[#8134af] px-5 py-3.5 text-white shadow-lg transition-transform hover:scale-[1.02]"
                             >
-                              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-tr from-[#f58529] via-[#dd2a7b] to-[#8134af] text-white">
-                                <Instagram className="h-4 w-4" />
+                              <Instagram className="h-6 w-6 shrink-0" />
+                              <span className="flex-1 text-start text-sm font-bold">
+                                {t("common.followOnInstagram")}
                               </span>
-                              <span className="flex-1 text-start">{t("common.followOnInstagram")}</span>
                             </a>
-                          </li>
-                        )}
-                        {tiktokUrl && (
-                          <li>
+                          )}
+                          {tiktokUrl && (
                             <a
                               href={tiktokUrl}
                               target="_blank"
                               rel="noopener"
                               onClick={() => setIntroOpen(false)}
-                              className="flex items-center gap-3 rounded-xl border border-white/20 bg-white/90 px-3 py-2.5 text-sm font-bold text-foreground transition-all hover:bg-white"
+                              className="flex items-center gap-4 rounded-xl bg-[#010101] px-5 py-3.5 text-white shadow-lg transition-transform hover:scale-[1.02]"
                             >
-                              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-foreground text-background">
-                                <Music2 className="h-4 w-4" />
+                              <svg
+                                className="h-6 w-6 shrink-0"
+                                viewBox="0 0 24 24"
+                                fill="currentColor"
+                              >
+                                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
+                              </svg>
+                              <span className="flex-1 text-start text-sm font-bold">
+                                {t("common.followOnTiktok")}
                               </span>
-                              <span className="flex-1 text-start">{t("common.followOnTiktok")}</span>
                             </a>
-                          </li>
-                        )}
-                      </ul>
-                    </div>
+                          )}
+                        </div>
+                        <button
+                          onClick={() => setIntroOpen(false)}
+                          className="mt-5 block w-full rounded-lg border border-border bg-muted py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-muted/80"
+                        >
+                          {t("common.close")}
+                        </button>
+                      </div>
+                    </>
                   )}
-                </div>
+                </>
               )}
               <Button
                 asChild

@@ -28,8 +28,10 @@ export const translations = {
     "common.chooseBranchToBook": "اختر الفرع للحجز",
     "common.loading": "جاري التحميل...",
     "common.getToKnow": "تعرف علينا",
+    "common.followUs": "تابعنا",
     "common.followOnInstagram": "تابعنا على إنستغرام",
     "common.followOnTiktok": "تابعنا على تيك توك",
+    "common.close": "إغلاق",
 
     // Home
     "home.hero.titleLead": "رعاية متخصصة لقطتك",
@@ -148,8 +150,10 @@ export const translations = {
     "common.chooseBranchToBook": "Choose a branch to book",
     "common.loading": "Loading...",
     "common.getToKnow": "Get to know us",
+    "common.followUs": "Follow us",
     "common.followOnInstagram": "Follow us on Instagram",
     "common.followOnTiktok": "Follow us on TikTok",
+    "common.close": "Close",
 
     "home.hero.titleLead": "Expert care for your cat,",
     "home.hero.titleAccent": "with heart and precision",
