@@ -1,5 +1,6 @@
+import { useEffect, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { MessageCircle, Sparkles, Heart, ShieldCheck, MapPin, Phone, ArrowLeft, Cat, Gift, Stethoscope } from "lucide-react";
+import { MessageCircle, Sparkles, Heart, ShieldCheck, MapPin, Phone, ArrowLeft, Cat, Gift, Stethoscope, Instagram, Music2, ChevronDown } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { SectionHeading } from "@/components/site/SectionHeading";
 import { ServiceCard } from "@/components/site/ServiceCard";
@@ -38,8 +39,28 @@ function HomePage() {
   const { data: settings } = useSettings();
   const featuredOffer = offers?.[0];
   const firstWa = branches?.[0]?.whatsapp;
-  const learnMoreUrl = settings?.instagram_learn_more_url || settings?.instagram || "/services";
-  const learnMoreExternal = /^https?:\/\//i.test(learnMoreUrl);
+  const instagramUrl = settings?.instagram || "";
+  const tiktokUrl = settings?.tiktok || "";
+  const hasSocial = !!(instagramUrl || tiktokUrl);
+
+  // Hero "Get to know us" dropdown
+  const [introOpen, setIntroOpen] = useState(false);
+  const introRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!introOpen) return;
+    const onDown = (e: MouseEvent) => {
+      if (!introRef.current?.contains(e.target as Node)) setIntroOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIntroOpen(false);
+    };
+    document.addEventListener("mousedown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [introOpen]);
 
   // Alternate icon palettes (teal / orange / teal / orange) for a balanced mix
   const features = [
