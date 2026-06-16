@@ -32,7 +32,7 @@ const items = [
   { title: "الخدمات الطبية", url: "/admin/services", icon: Stethoscope },
   { title: "العروض", url: "/admin/offers", icon: Tag },
   { title: "الفروع", url: "/admin/branches", icon: MapPin },
-  { title: "الأطباء", url: "/admin/doctors", icon: Stethoscope },
+  { title: "الأطباء", url: "/admin/doctors", icon: UserRound },
   { title: "محتوى الصفحات", url: "/admin/content", icon: FileText },
   { title: "مكتبة الصور", url: "/admin/media", icon: ImageIcon },
   { title: "الإعدادات", url: "/admin/settings", icon: Settings },
