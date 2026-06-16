@@ -360,12 +360,11 @@ function AboutPage() {
                         className="reveal reveal-up group flex items-center gap-4 rounded-2xl border border-border bg-card p-5 transition-all duration-500 hover:-translate-y-1 hover:shadow-[var(--shadow-elegant)]"
                       >
                         <div
-                          className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full ring-2 transition-transform duration-500 group-hover:scale-110"
+                          className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 transition-transform duration-500 group-hover:scale-110"
                           style={{
                             background: `color-mix(in oklab, ${accent} 12%, transparent)`,
                             color: accent,
-                            // @ts-expect-error css var
-                            "--tw-ring-color": `color-mix(in oklab, ${accent} 30%, transparent)`,
+                            borderColor: `color-mix(in oklab, ${accent} 30%, transparent)`,
                           }}
                         >
                           {d.photo_url ? (
