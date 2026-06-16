@@ -40,6 +40,9 @@ export function Header() {
           </div>
           <div className="flex flex-col leading-tight">
             <span className="text-base sm:text-lg font-extrabold text-foreground whitespace-nowrap">
+              Kitty Cat Clinic
+            </span>
+            <span className="text-[11px] sm:text-xs font-semibold text-foreground/70 whitespace-nowrap">
               عيادة قطتي الصغيرة
             </span>
           </div>
