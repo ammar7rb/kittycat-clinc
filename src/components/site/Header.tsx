@@ -39,11 +39,8 @@ export function Header() {
             />
           </div>
           <div className="flex flex-col leading-tight">
-            <span className="text-sm sm:text-base font-bold text-foreground whitespace-nowrap">
-              Kitty Cat Clinic
-            </span>
-            <span className="text-[11px] sm:text-xs text-muted-foreground whitespace-nowrap">
-              عيادات كيتي كات
+            <span className="text-base sm:text-lg font-extrabold text-foreground whitespace-nowrap">
+              عيادة قطتي الصغيرة
             </span>
           </div>
         </Link>

@@ -14,7 +14,8 @@ import {
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { FollowUs } from "@/components/site/FollowUs";
 import { useLanguage, useLocalized } from "@/lib/i18n/LanguageProvider";
-import { useBranches } from "@/lib/queries";
+import { useBranches, useDoctors } from "@/lib/queries";
+import { UserRound } from "lucide-react";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -40,6 +41,7 @@ function AboutPage() {
   const { t, lang } = useLanguage();
   const pick = useLocalized();
   const { data: branches } = useBranches();
+  const { data: doctors } = useDoctors();
 
   const values = [
     { icon: Cat, key: "v1" as const, tone: "secondary" as const },
@@ -304,6 +306,98 @@ function AboutPage() {
           </div>
         </section>
       )}
+
+      {/* 4.5) Doctors per branch */}
+      {branches && branches.length > 0 && doctors && doctors.length > 0 && (
+        <section className="container mx-auto px-4 py-16 md:py-20">
+          <div className="reveal reveal-up text-center">
+            <p className="text-sm font-bold" style={{ color: "var(--secondary)" }}>
+              {lang === "ar" ? "فريقنا الطبي" : "Our Medical Team"}
+            </p>
+            <h2 className="mt-2 text-3xl font-extrabold text-foreground md:text-4xl">
+              {lang === "ar" ? (
+                <>
+                  أطباء <span style={{ color: "var(--primary)" }}>عيادة قطتي الصغيرة</span>
+                </>
+              ) : (
+                <>
+                  Our <span style={{ color: "var(--primary)" }}>Veterinarians</span>
+                </>
+              )}
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-sm text-muted-foreground">
+              {lang === "ar"
+                ? "نخبة من الأطباء البيطريين المتخصصين في رعاية القطط، متواجدون في كل فرع لخدمتك."
+                : "A team of specialized feline veterinarians, available at every branch."}
+            </p>
+          </div>
+
+          <div className="mt-12 space-y-12">
+            {branches.map((branch, bi) => {
+              const list = doctors.filter((d) => d.branch_id === branch.id);
+              if (list.length === 0) return null;
+              const accent = bi % 2 === 1 ? "var(--secondary)" : "var(--primary)";
+              return (
+                <div key={branch.id} data-reveal-delay={bi * 80} className="reveal reveal-up">
+                  <div className="mb-6 flex items-center gap-3">
+                    <span
+                      className="inline-block h-8 w-1 rounded-full"
+                      style={{ background: accent }}
+                    />
+                    <h3 className="text-xl font-bold text-foreground md:text-2xl">
+                      {pick(branch, "name")}
+                    </h3>
+                    <span className="text-sm text-muted-foreground">
+                      {list.length} {lang === "ar" ? "طبيب" : "doctors"}
+                    </span>
+                  </div>
+
+                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    {list.map((d, i) => (
+                      <article
+                        key={d.id}
+                        data-reveal-delay={i * 60}
+                        className="reveal reveal-up group flex items-center gap-4 rounded-2xl border border-border bg-card p-5 transition-all duration-500 hover:-translate-y-1 hover:shadow-[var(--shadow-elegant)]"
+                      >
+                        <div
+                          className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 transition-transform duration-500 group-hover:scale-110"
+                          style={{
+                            background: `color-mix(in oklab, ${accent} 12%, transparent)`,
+                            color: accent,
+                            borderColor: `color-mix(in oklab, ${accent} 30%, transparent)`,
+                          }}
+                        >
+                          {d.photo_url ? (
+                            <img
+                              src={d.photo_url}
+                              alt={pick(d, "name") ?? d.name_ar}
+                              className="h-full w-full object-cover"
+                            />
+                          ) : (
+                            <UserRound className="h-6 w-6" />
+                          )}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <h4 className="truncate font-bold text-foreground">
+                            {pick(d, "name") || d.name_ar}
+                          </h4>
+                          {(d.title_ar || d.title_en) && (
+                            <p className="truncate text-xs text-muted-foreground">
+                              {pick(d, "title")}
+                            </p>
+                          )}
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
+
 
       {/* 5) Follow us — filled boutique style */}
       <section className="container mx-auto px-4 pb-20">

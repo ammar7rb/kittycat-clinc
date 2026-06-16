@@ -45,6 +45,34 @@ export type OfferRow = {
   is_active: boolean;
 };
 
+export type DoctorRow = {
+  id: string;
+  branch_id: string;
+  name_ar: string;
+  name_en: string | null;
+  title_ar: string | null;
+  title_en: string | null;
+  photo_url: string | null;
+  sort_order: number;
+  is_active: boolean;
+};
+
+export function useDoctors() {
+  return useQuery({
+    queryKey: ["doctors"],
+    queryFn: async (): Promise<DoctorRow[]> => {
+      const { data, error } = await supabase
+        .from("doctors")
+        .select("*")
+        .eq("is_active", true)
+        .order("sort_order");
+      if (error) throw error;
+      return (data ?? []) as DoctorRow[];
+    },
+  });
+}
+
+
 
 export type ProductRow = {
   id: string;
