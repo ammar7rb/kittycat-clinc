@@ -2,43 +2,32 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
-import { Plus, Pencil, Trash2, Save, Search } from "lucide-react";
+import { Save, RotateCcw, Search, CheckCircle2, Circle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import {
   listContent,
   upsertContent,
-  updateContent,
   deleteContent,
 } from "@/lib/content-admin.functions";
+import {
+  getAllFields,
+  groupFields,
+  GROUP_LABELS,
+  type ContentGroupId,
+  type ContentField,
+} from "@/lib/i18n/content-catalog";
 
 export const Route = createFileRoute("/_authenticated/admin/content")({
   component: ContentAdminPage,
 });
 
-type ContentRow = {
+type Row = {
   id: string;
   key: string;
   value_ar: string | null;
@@ -46,424 +35,234 @@ type ContentRow = {
   group_name: string | null;
 };
 
-const emptyNew = { key: "", value_ar: "", value_en: "", group_name: "" };
-
 function ContentAdminPage() {
   const qc = useQueryClient();
   const fetchList = useServerFn(listContent);
   const upsertFn = useServerFn(upsertContent);
-  const updateFn = useServerFn(updateContent);
   const deleteFn = useServerFn(deleteContent);
 
   const { data: rows = [], isLoading } = useQuery({
     queryKey: ["admin", "content"],
-    queryFn: () => fetchList() as Promise<ContentRow[]>,
+    queryFn: () => fetchList() as Promise<Row[]>,
   });
 
+  const rowByKey = useMemo(() => {
+    const m = new Map<string, Row>();
+    for (const r of rows) m.set(r.key, r);
+    return m;
+  }, [rows]);
+
+  const allFields = useMemo(() => getAllFields(), []);
+  const grouped = useMemo(() => groupFields(allFields), [allFields]);
+
+  const [activeGroup, setActiveGroup] = useState<ContentGroupId>(grouped[0]?.group ?? "home");
   const [search, setSearch] = useState("");
-  const [creating, setCreating] = useState(false);
-  const [editing, setEditing] = useState<ContentRow | null>(null);
-  const [confirmDelete, setConfirmDelete] = useState<ContentRow | null>(null);
+  const [drafts, setDrafts] = useState<Record<string, { ar: string; en: string }>>({});
+
+  // hydrate drafts when rows load/change
+  useEffect(() => {
+    const next: Record<string, { ar: string; en: string }> = {};
+    for (const f of allFields) {
+      const r = rowByKey.get(f.key);
+      next[f.key] = {
+        ar: r?.value_ar ?? f.defaultAr,
+        en: r?.value_en ?? f.defaultEn,
+      };
+    }
+    setDrafts(next);
+  }, [rowByKey, allFields]);
 
   const invalidate = () => {
     qc.invalidateQueries({ queryKey: ["admin", "content"] });
     qc.invalidateQueries({ queryKey: ["content"] });
   };
 
-  const createMut = useMutation({
-    mutationFn: (data: typeof emptyNew) =>
-      upsertFn({
+  const saveMut = useMutation({
+    mutationFn: async (field: ContentField) => {
+      const d = drafts[field.key] ?? { ar: "", en: "" };
+      return upsertFn({
         data: {
-          key: data.key.trim(),
-          value_ar: data.value_ar || null,
-          value_en: data.value_en || null,
-          group_name: data.group_name?.trim() || null,
+          key: field.key,
+          group_name: field.group,
+          value_ar: d.ar || null,
+          value_en: d.en || null,
         },
-      }),
-    onSuccess: () => {
-      toast.success("تمت الإضافة");
-      setCreating(false);
-      invalidate();
+      });
     },
-    onError: (e: Error) => toast.error(e.message),
-  });
-
-  const updateMut = useMutation({
-    mutationFn: (row: ContentRow) =>
-      updateFn({
-        data: {
-          id: row.id,
-          patch: {
-            value_ar: row.value_ar || null,
-            value_en: row.value_en || null,
-            group_name: row.group_name?.trim() || null,
-          },
-        },
-      }),
     onSuccess: () => {
       toast.success("تم الحفظ");
-      setEditing(null);
       invalidate();
     },
     onError: (e: Error) => toast.error(e.message),
   });
 
-  const deleteMut = useMutation({
-    mutationFn: (id: string) => deleteFn({ data: { id } }),
-    onSuccess: () => {
-      toast.success("تم الحذف");
-      setConfirmDelete(null);
+  const resetMut = useMutation({
+    mutationFn: async (field: ContentField) => {
+      const r = rowByKey.get(field.key);
+      if (r) await deleteFn({ data: { id: r.id } });
+      return field;
+    },
+    onSuccess: (field) => {
+      setDrafts((p) => ({
+        ...p,
+        [field.key]: { ar: field.defaultAr, en: field.defaultEn },
+      }));
+      toast.success("تمت استعادة النص الافتراضي");
       invalidate();
     },
     onError: (e: Error) => toast.error(e.message),
   });
 
-  const filtered = useMemo(() => {
+  const activeFields = useMemo(() => {
+    const list = grouped.find((g) => g.group === activeGroup)?.fields ?? [];
     const q = search.trim().toLowerCase();
-    if (!q) return rows;
-    return rows.filter(
-      (r) =>
-        r.key.toLowerCase().includes(q) ||
-        (r.value_ar ?? "").toLowerCase().includes(q) ||
-        (r.value_en ?? "").toLowerCase().includes(q) ||
-        (r.group_name ?? "").toLowerCase().includes(q),
+    if (!q) return list;
+    return list.filter(
+      (f) =>
+        f.label.toLowerCase().includes(q) ||
+        f.defaultAr.toLowerCase().includes(q) ||
+        f.defaultEn.toLowerCase().includes(q),
     );
-  }, [rows, search]);
+  }, [grouped, activeGroup, search]);
 
-  const groups = useMemo(() => {
-    const set = new Set<string>();
-    for (const r of rows) set.add(r.group_name?.trim() || "عام");
-    return Array.from(set).sort();
-  }, [rows]);
+  if (isLoading) {
+    return <p className="p-6 text-muted-foreground">جاري التحميل...</p>;
+  }
 
-  const [activeGroup, setActiveGroup] = useState<string>("");
-  useEffect(() => {
-    if (!activeGroup && groups.length) setActiveGroup(groups[0]);
-    else if (activeGroup && !groups.includes(activeGroup) && groups.length)
-      setActiveGroup(groups[0]);
-  }, [groups, activeGroup]);
-
-  const visibleRows = useMemo(
-    () =>
-      filtered.filter(
-        (r) => (r.group_name?.trim() || "عام") === activeGroup,
-      ),
-    [filtered, activeGroup],
-  );
-
-  const groupLabels: Record<string, string> = {
-    general: "عام",
-    navigation: "قائمة التنقل",
-    home: "الصفحة الرئيسية",
-    about: "من نحن",
-    contact: "تواصل معنا",
-    footer: "الفوتر",
-    services: "الخدمات",
-    offers: "العروض",
-    branches: "الفروع",
-  };
-  const labelFor = (g: string) => groupLabels[g] ?? g;
+  const isCustomized = (key: string) => rowByKey.has(key);
 
   return (
-    <div className="space-y-6 p-6">
-      <div className="flex items-center justify-between gap-4 flex-wrap">
-        <div>
-          <h1 className="text-2xl font-bold">محتوى الصفحات</h1>
-          <p className="text-sm text-muted-foreground">
-            اختر الصفحة من الأعلى لتعديل نصوصها
-          </p>
-        </div>
-        <Button onClick={() => setCreating(true)}>
-          <Plus className="ms-2 h-4 w-4" /> نص جديد
-        </Button>
+    <div className="space-y-6 p-4 sm:p-6">
+      <div>
+        <h1 className="text-2xl font-bold">محتوى الصفحات</h1>
+        <p className="text-sm text-muted-foreground mt-1">
+          عدّل أي نص يظهر في الموقع. الحقول المعلّمة <CheckCircle2 className="inline h-3.5 w-3.5 text-primary" /> تم تخصيصها،
+          أما <Circle className="inline h-3.5 w-3.5 text-muted-foreground" /> فهي تستخدم النص الافتراضي.
+        </p>
       </div>
 
-      {isLoading ? (
-        <p className="text-muted-foreground">جاري التحميل...</p>
-      ) : groups.length === 0 ? (
+      {/* Group tabs */}
+      <div className="flex flex-wrap gap-2 border-b pb-3">
+        {grouped.map((g) => {
+          const customCount = g.fields.filter((f) => isCustomized(f.key)).length;
+          const active = g.group === activeGroup;
+          return (
+            <button
+              key={g.group}
+              onClick={() => setActiveGroup(g.group)}
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                active
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted hover:bg-muted/70 text-foreground"
+              }`}
+            >
+              {GROUP_LABELS[g.group]}
+              <span className="ms-2 text-xs opacity-70">
+                ({g.fields.length}
+                {customCount > 0 ? ` · ${customCount} مخصّص` : ""})
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Search */}
+      <div className="relative max-w-md">
+        <Search className="absolute end-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Input
+          placeholder="ابحث داخل هذه الصفحة..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="pe-10"
+        />
+      </div>
+
+      {activeFields.length === 0 ? (
         <Card className="p-8 text-center text-muted-foreground">
-          لا توجد نصوص بعد. ابدأ بإضافة أول نص.
+          لا توجد نتائج مطابقة.
         </Card>
       ) : (
-        <>
-          <div className="flex flex-wrap gap-2 border-b pb-3">
-            {groups.map((g) => {
-              const count = rows.filter(
-                (r) => (r.group_name?.trim() || "عام") === g,
-              ).length;
-              const active = g === activeGroup;
-              return (
-                <button
-                  key={g}
-                  onClick={() => setActiveGroup(g)}
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                    active
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted hover:bg-muted/70 text-foreground"
-                  }`}
-                >
-                  {labelFor(g)}
-                  <span className="ms-2 opacity-70">({count})</span>
-                </button>
-              );
-            })}
-          </div>
-
-          <div className="relative max-w-md">
-            <Search className="absolute end-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="بحث داخل الصفحة..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="pe-10"
-            />
-          </div>
-
-          {visibleRows.length === 0 ? (
-            <Card className="p-8 text-center text-muted-foreground">
-              لا توجد نصوص مطابقة في هذه الصفحة.
-            </Card>
-          ) : (
-            <div className="space-y-2">
-              {visibleRows.map((r) => (
-                <Card key={r.id} className="p-4">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1 min-w-0 space-y-2">
-                      <code className="text-xs bg-muted px-2 py-1 rounded">
-                        {r.key}
-                      </code>
-                      <div className="grid gap-2 md:grid-cols-2">
-                        <div>
-                          <p className="text-xs text-muted-foreground mb-1">
-                            عربي
-                          </p>
-                          <p className="text-sm whitespace-pre-wrap break-words">
-                            {r.value_ar || (
-                              <span className="text-muted-foreground italic">
-                                —
-                              </span>
-                            )}
-                          </p>
-                        </div>
-                        <div dir="ltr">
-                          <p className="text-xs text-muted-foreground mb-1">
-                            English
-                          </p>
-                          <p className="text-sm whitespace-pre-wrap break-words">
-                            {r.value_en || (
-                              <span className="text-muted-foreground italic">
-                                —
-                              </span>
-                            )}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex gap-1 shrink-0">
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        onClick={() => setEditing(r)}
-                      >
-                        <Pencil className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        onClick={() => setConfirmDelete(r)}
-                      >
-                        <Trash2 className="h-4 w-4 text-destructive" />
-                      </Button>
-                    </div>
+        <div className="space-y-3">
+          {activeFields.map((f) => {
+            const d = drafts[f.key] ?? { ar: f.defaultAr, en: f.defaultEn };
+            const customized = isCustomized(f.key);
+            const dirty =
+              d.ar !== (rowByKey.get(f.key)?.value_ar ?? f.defaultAr) ||
+              d.en !== (rowByKey.get(f.key)?.value_en ?? f.defaultEn);
+            const isLong = f.defaultAr.length > 60 || f.defaultEn.length > 60;
+            const Field = isLong ? Textarea : Input;
+            return (
+              <Card key={f.key} className="p-4 space-y-3">
+                <div className="flex items-start justify-between gap-3 flex-wrap">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <Label className="text-sm font-semibold">{f.label}</Label>
+                    {customized ? (
+                      <Badge variant="default" className="text-[10px]">
+                        مخصّص
+                      </Badge>
+                    ) : (
+                      <Badge variant="outline" className="text-[10px]">
+                        افتراضي
+                      </Badge>
+                    )}
                   </div>
-                </Card>
-              ))}
-            </div>
-          )}
-        </>
+                </div>
+
+                <div className="grid gap-2 md:grid-cols-2">
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">عربي</p>
+                    <Field
+                      value={d.ar}
+                      onChange={(e) =>
+                        setDrafts((p) => ({
+                          ...p,
+                          [f.key]: { ...d, ar: e.target.value },
+                        }))
+                      }
+                      rows={isLong ? 3 : undefined}
+                    />
+                  </div>
+                  <div dir="ltr">
+                    <p className="text-xs text-muted-foreground mb-1">English</p>
+                    <Field
+                      value={d.en}
+                      onChange={(e) =>
+                        setDrafts((p) => ({
+                          ...p,
+                          [f.key]: { ...d, en: e.target.value },
+                        }))
+                      }
+                      rows={isLong ? 3 : undefined}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex justify-end gap-2">
+                  {customized && (
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => resetMut.mutate(f)}
+                      disabled={resetMut.isPending}
+                    >
+                      <RotateCcw className="ms-1 h-3.5 w-3.5" />
+                      استعادة الافتراضي
+                    </Button>
+                  )}
+                  <Button
+                    size="sm"
+                    onClick={() => saveMut.mutate(f)}
+                    disabled={saveMut.isPending || !dirty}
+                  >
+                    <Save className="ms-1 h-3.5 w-3.5" />
+                    حفظ
+                  </Button>
+                </div>
+              </Card>
+            );
+          })}
+        </div>
       )}
-
-      <CreateDialog
-        open={creating}
-        onOpenChange={setCreating}
-        onSubmit={(d) => createMut.mutate(d)}
-        loading={createMut.isPending}
-      />
-
-      <EditDialog
-        row={editing}
-        onClose={() => setEditing(null)}
-        onSubmit={(r) => updateMut.mutate(r)}
-        loading={updateMut.isPending}
-      />
-
-      <AlertDialog
-        open={!!confirmDelete}
-        onOpenChange={(o) => !o && setConfirmDelete(null)}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>تأكيد الحذف</AlertDialogTitle>
-            <AlertDialogDescription>
-              سيتم حذف النص نهائياً. لا يمكن التراجع.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>إلغاء</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => confirmDelete && deleteMut.mutate(confirmDelete.id)}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              حذف
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </div>
-  );
-}
-
-function CreateDialog({
-  open,
-  onOpenChange,
-  onSubmit,
-  loading,
-}: {
-  open: boolean;
-  onOpenChange: (o: boolean) => void;
-  onSubmit: (d: typeof emptyNew) => void;
-  loading: boolean;
-}) {
-  const [form, setForm] = useState(emptyNew);
-  useEffect(() => {
-    if (open) setForm(emptyNew);
-  }, [open]);
-
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl">
-        <DialogHeader>
-          <DialogTitle>نص جديد</DialogTitle>
-          <DialogDescription>
-            المفتاح هو معرّف فريد يستخدمه الموقع لعرض النص (مثلاً: home.hero.title)
-          </DialogDescription>
-        </DialogHeader>
-        <div className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2">
-            <div>
-              <Label>المفتاح (key) *</Label>
-              <Input
-                value={form.key}
-                onChange={(e) => setForm({ ...form, key: e.target.value })}
-                placeholder="home.hero.title"
-                dir="ltr"
-              />
-            </div>
-            <div>
-              <Label>المجموعة (اختياري)</Label>
-              <Input
-                value={form.group_name}
-                onChange={(e) => setForm({ ...form, group_name: e.target.value })}
-                placeholder="home"
-              />
-            </div>
-          </div>
-          <div>
-            <Label>النص بالعربية</Label>
-            <Textarea
-              value={form.value_ar}
-              onChange={(e) => setForm({ ...form, value_ar: e.target.value })}
-              rows={3}
-            />
-          </div>
-          <div>
-            <Label>النص بالإنجليزية</Label>
-            <Textarea
-              dir="ltr"
-              value={form.value_en}
-              onChange={(e) => setForm({ ...form, value_en: e.target.value })}
-              rows={3}
-            />
-          </div>
-        </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
-            إلغاء
-          </Button>
-          <Button
-            onClick={() => onSubmit(form)}
-            disabled={!form.key.trim() || loading}
-          >
-            <Save className="ms-2 h-4 w-4" /> حفظ
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-}
-
-function EditDialog({
-  row,
-  onClose,
-  onSubmit,
-  loading,
-}: {
-  row: ContentRow | null;
-  onClose: () => void;
-  onSubmit: (r: ContentRow) => void;
-  loading: boolean;
-}) {
-  const [form, setForm] = useState<ContentRow | null>(row);
-  useEffect(() => {
-    setForm(row);
-  }, [row]);
-
-  if (!form) return null;
-
-  return (
-    <Dialog open={!!row} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="max-w-2xl">
-        <DialogHeader>
-          <DialogTitle>تعديل النص</DialogTitle>
-          <DialogDescription>
-            <code className="text-xs">{form.key}</code>
-          </DialogDescription>
-        </DialogHeader>
-        <div className="space-y-4">
-          <div>
-            <Label>المجموعة</Label>
-            <Input
-              value={form.group_name ?? ""}
-              onChange={(e) => setForm({ ...form, group_name: e.target.value })}
-            />
-          </div>
-          <div>
-            <Label>النص بالعربية</Label>
-            <Textarea
-              value={form.value_ar ?? ""}
-              onChange={(e) => setForm({ ...form, value_ar: e.target.value })}
-              rows={4}
-            />
-          </div>
-          <div>
-            <Label>النص بالإنجليزية</Label>
-            <Textarea
-              dir="ltr"
-              value={form.value_en ?? ""}
-              onChange={(e) => setForm({ ...form, value_en: e.target.value })}
-              rows={4}
-            />
-          </div>
-        </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={onClose}>
-            إلغاء
-          </Button>
-          <Button onClick={() => onSubmit(form)} disabled={loading}>
-            <Save className="ms-2 h-4 w-4" /> حفظ التغييرات
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
   );
 }
