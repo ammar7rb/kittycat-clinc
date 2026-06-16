@@ -9,6 +9,7 @@ import {
   Image as ImageIcon,
   Settings,
   LogOut,
+  UserRound,
 } from "lucide-react";
 import {
   Sidebar,
