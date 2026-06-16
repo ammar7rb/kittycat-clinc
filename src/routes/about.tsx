@@ -41,6 +41,7 @@ function AboutPage() {
   const { t, lang } = useLanguage();
   const pick = useLocalized();
   const { data: branches } = useBranches();
+  const { data: doctors } = useDoctors();
 
   const values = [
     { icon: Cat, key: "v1" as const, tone: "secondary" as const },
