@@ -14,7 +14,8 @@ import {
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { FollowUs } from "@/components/site/FollowUs";
 import { useLanguage, useLocalized } from "@/lib/i18n/LanguageProvider";
-import { useBranches } from "@/lib/queries";
+import { useBranches, useDoctors } from "@/lib/queries";
+import { UserRound } from "lucide-react";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
