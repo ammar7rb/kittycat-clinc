@@ -81,8 +81,7 @@ export const updateMediaAlt = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: row, error } = await supabaseAdmin
+    const { data: row, error } = await context.supabase
       .from("media")
       .update({ alt_text: data.alt_text })
       .eq("id", data.id)
@@ -97,18 +96,17 @@ export const deleteMedia = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-    const { data: row, error: fErr } = await supabaseAdmin
+    const { data: row, error: fErr } = await context.supabase
       .from("media")
       .select("storage_path")
       .eq("id", data.id)
       .single();
     if (fErr) throw new Error(fErr.message);
 
-    await supabaseAdmin.storage.from("media").remove([row.storage_path]);
+    await context.supabase.storage.from("media").remove([row.storage_path]);
 
-    const { error } = await supabaseAdmin.from("media").delete().eq("id", data.id);
+    const { error } = await context.supabase.from("media").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
   });
