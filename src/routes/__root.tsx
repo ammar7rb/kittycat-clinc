@@ -16,6 +16,7 @@ import { ThemeProvider } from "../lib/theme/ThemeProvider";
 import { Toaster } from "../components/ui/sonner";
 import { SiteHeadEffects } from "../components/site/SiteHeadEffects";
 import { ScrollReveal } from "../components/site/ScrollReveal";
+import kittyIconAsset from "../assets/kitty-icon.png.asset.json";
 
 function NotFoundComponent() {
   return (
@@ -96,6 +97,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      { rel: "icon", type: "image/png", href: kittyIconAsset.url },
+      { rel: "shortcut icon", type: "image/png", href: kittyIconAsset.url },
+      { rel: "apple-touch-icon", href: kittyIconAsset.url },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
