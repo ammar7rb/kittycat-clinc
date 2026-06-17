@@ -10,6 +10,8 @@ import {
   Settings,
   LogOut,
   UserRound,
+  UserCog,
+
 } from "lucide-react";
 import {
   Sidebar,
@@ -36,7 +38,9 @@ const items = [
   { title: "محتوى الصفحات", url: "/admin/content", icon: FileText },
   { title: "مكتبة الصور", url: "/admin/media", icon: ImageIcon },
   { title: "الإعدادات", url: "/admin/settings", icon: Settings },
+  { title: "حسابي", url: "/admin/account", icon: UserCog },
 ];
+
 
 export function AdminSidebar() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
