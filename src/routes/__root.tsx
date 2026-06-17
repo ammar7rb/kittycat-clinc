@@ -16,6 +16,7 @@ import { ThemeProvider } from "../lib/theme/ThemeProvider";
 import { Toaster } from "../components/ui/sonner";
 import { SiteHeadEffects } from "../components/site/SiteHeadEffects";
 import { ScrollReveal } from "../components/site/ScrollReveal";
+import kittyIconAsset from "../assets/kitty-icon.png.asset.json";
 
 function NotFoundComponent() {
   return (
