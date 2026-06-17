@@ -368,6 +368,37 @@ function OfferFormDialog({
               </div>
             </Field>
           </div>
+
+          <Field label="شكل العرض في الصفحة الرئيسية">
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => setForm({ ...form, layout: "wide" })}
+                className={`rounded-xl border-2 p-3 text-right transition-all ${
+                  form.layout === "wide"
+                    ? "border-primary bg-primary/5"
+                    : "border-border hover:border-primary/40"
+                }`}
+              >
+                <div className="mx-auto mb-2 h-12 w-full rounded-md bg-muted" />
+                <p className="text-sm font-bold">عريض 16:9</p>
+                <p className="text-xs text-muted-foreground">صورة بجانب النص</p>
+              </button>
+              <button
+                type="button"
+                onClick={() => setForm({ ...form, layout: "portrait" })}
+                className={`rounded-xl border-2 p-3 text-right transition-all ${
+                  form.layout === "portrait"
+                    ? "border-primary bg-primary/5"
+                    : "border-border hover:border-primary/40"
+                }`}
+              >
+                <div className="mx-auto mb-2 h-16 w-12 rounded-md bg-muted" />
+                <p className="text-sm font-bold">طولي</p>
+                <p className="text-xs text-muted-foreground">صورة تحت النص</p>
+              </button>
+            </div>
+          </Field>
         </div>
 
         <DialogFooter>
