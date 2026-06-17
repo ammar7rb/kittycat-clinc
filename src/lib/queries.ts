@@ -43,6 +43,7 @@ export type OfferRow = {
   end_date: string | null;
   sort_order: number;
   is_active: boolean;
+  layout: "wide" | "portrait";
 };
 
 export type DoctorRow = {

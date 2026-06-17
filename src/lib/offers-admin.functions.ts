@@ -13,6 +13,7 @@ const OfferInput = z.object({
   end_date: z.string().nullable().optional(),
   sort_order: z.number().int().min(0).default(0),
   is_active: z.boolean().default(true),
+  layout: z.enum(["wide", "portrait"]).default("wide"),
 });
 
 export const listOffersAdmin = createServerFn({ method: "GET" })

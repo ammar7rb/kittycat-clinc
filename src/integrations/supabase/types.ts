@@ -172,6 +172,7 @@ export type Database = {
           id: string
           image_url: string | null
           is_active: boolean
+          layout: string
           sort_order: number
           start_date: string | null
           title_ar: string
@@ -186,6 +187,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           is_active?: boolean
+          layout?: string
           sort_order?: number
           start_date?: string | null
           title_ar: string
@@ -200,6 +202,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           is_active?: boolean
+          layout?: string
           sort_order?: number
           start_date?: string | null
           title_ar?: string
