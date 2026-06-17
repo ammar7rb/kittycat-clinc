@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { requireAdmin } from "@/integrations/supabase/require-admin";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
 import { assertAdmin } from "./admin.functions";
 
@@ -22,7 +22,7 @@ const BranchInput = z.object({
 });
 
 export const listBranchesAdmin = createServerFn({ method: "GET" })
-  .middleware([requireAdmin])
+  .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     await assertAdmin(context.supabase, context.userId);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -35,7 +35,7 @@ export const listBranchesAdmin = createServerFn({ method: "GET" })
   });
 
 export const createBranch = createServerFn({ method: "POST" })
-  .middleware([requireAdmin])
+  .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => BranchInput.parse(data))
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
@@ -46,7 +46,7 @@ export const createBranch = createServerFn({ method: "POST" })
   });
 
 export const updateBranch = createServerFn({ method: "POST" })
-  .middleware([requireAdmin])
+  .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) =>
     z.object({ id: z.string().uuid(), patch: BranchInput.partial() }).parse(data),
   )
@@ -64,7 +64,7 @@ export const updateBranch = createServerFn({ method: "POST" })
   });
 
 export const deleteBranch = createServerFn({ method: "POST" })
-  .middleware([requireAdmin])
+  .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);

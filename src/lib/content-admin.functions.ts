@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { requireAdmin } from "@/integrations/supabase/require-admin";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
 import { assertAdmin } from "./admin.functions";
 
@@ -11,7 +11,7 @@ const ContentInput = z.object({
 });
 
 export const listContent = createServerFn({ method: "GET" })
-  .middleware([requireAdmin])
+  .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     await assertAdmin(context.supabase, context.userId);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -25,7 +25,7 @@ export const listContent = createServerFn({ method: "GET" })
   });
 
 export const upsertContent = createServerFn({ method: "POST" })
-  .middleware([requireAdmin])
+  .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => ContentInput.parse(data))
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
@@ -40,7 +40,7 @@ export const upsertContent = createServerFn({ method: "POST" })
   });
 
 export const updateContent = createServerFn({ method: "POST" })
-  .middleware([requireAdmin])
+  .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) =>
     z
       .object({
@@ -63,7 +63,7 @@ export const updateContent = createServerFn({ method: "POST" })
   });
 
 export const deleteContent = createServerFn({ method: "POST" })
-  .middleware([requireAdmin])
+  .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);

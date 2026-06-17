@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { requireAdmin } from "@/integrations/supabase/require-admin";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
 import { assertAdmin } from "./admin.functions";
 
@@ -16,7 +16,7 @@ const OfferInput = z.object({
 });
 
 export const listOffersAdmin = createServerFn({ method: "GET" })
-  .middleware([requireAdmin])
+  .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     await assertAdmin(context.supabase, context.userId);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -30,7 +30,7 @@ export const listOffersAdmin = createServerFn({ method: "GET" })
   });
 
 export const createOffer = createServerFn({ method: "POST" })
-  .middleware([requireAdmin])
+  .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => OfferInput.parse(data))
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
@@ -45,7 +45,7 @@ export const createOffer = createServerFn({ method: "POST" })
   });
 
 export const updateOffer = createServerFn({ method: "POST" })
-  .middleware([requireAdmin])
+  .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) =>
     z.object({ id: z.string().uuid(), patch: OfferInput.partial() }).parse(data),
   )
@@ -63,7 +63,7 @@ export const updateOffer = createServerFn({ method: "POST" })
   });
 
 export const deleteOffer = createServerFn({ method: "POST" })
-  .middleware([requireAdmin])
+  .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
