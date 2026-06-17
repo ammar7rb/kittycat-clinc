@@ -153,7 +153,7 @@ function OffersAdminPage() {
           </div>
         ) : (
           <ul className="divide-y">
-            {offers.map((o) => (
+            {(offers as Offer[]).map((o) => (
               <li key={o.id} className="flex items-center gap-3 p-4 hover:bg-muted/30">
                 <div className="h-14 w-20 flex-shrink-0 overflow-hidden rounded-md bg-muted">
                   {o.image_url ? (
