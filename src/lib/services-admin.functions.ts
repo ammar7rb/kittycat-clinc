@@ -18,8 +18,7 @@ export const listServicesAdmin = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     await assertAdmin(context.supabase, context.userId);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await context.supabase
       .from("services")
       .select("*")
       .order("sort_order", { ascending: true })
@@ -33,8 +32,7 @@ export const createService = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => ServiceInput.parse(data))
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: row, error } = await supabaseAdmin
+    const { data: row, error } = await context.supabase
       .from("services")
       .insert(data)
       .select()
@@ -50,8 +48,7 @@ export const updateService = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: row, error } = await supabaseAdmin
+    const { data: row, error } = await context.supabase
       .from("services")
       .update(data.patch)
       .eq("id", data.id)
@@ -66,8 +63,7 @@ export const deleteService = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { error } = await supabaseAdmin.from("services").delete().eq("id", data.id);
+    const { error } = await context.supabase.from("services").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
   });

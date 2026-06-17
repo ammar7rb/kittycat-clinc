@@ -25,8 +25,7 @@ export const listBranchesAdmin = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     await assertAdmin(context.supabase, context.userId);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await context.supabase
       .from("branches")
       .select("*")
       .order("sort_order", { ascending: true });
@@ -39,8 +38,7 @@ export const createBranch = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => BranchInput.parse(data))
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: row, error } = await supabaseAdmin.from("branches").insert(data).select().single();
+    const { data: row, error } = await context.supabase.from("branches").insert(data).select().single();
     if (error) throw new Error(error.message);
     return row;
   });
@@ -52,8 +50,7 @@ export const updateBranch = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: row, error } = await supabaseAdmin
+    const { data: row, error } = await context.supabase
       .from("branches")
       .update(data.patch)
       .eq("id", data.id)
@@ -68,8 +65,7 @@ export const deleteBranch = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { error } = await supabaseAdmin.from("branches").delete().eq("id", data.id);
+    const { error } = await context.supabase.from("branches").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
   });
