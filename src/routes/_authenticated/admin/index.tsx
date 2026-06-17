@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
 import { Stethoscope, Tag, MapPin, FileText } from "lucide-react";
 import { getAdminStats } from "@/lib/admin.functions";
+import "@/lib/admin-credentials.functions";
 
 export const Route = createFileRoute("/_authenticated/admin/")({
   component: AdminHome,
