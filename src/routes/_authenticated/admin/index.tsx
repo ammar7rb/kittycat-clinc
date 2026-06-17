@@ -73,17 +73,6 @@ function AdminHome() {
         ))}
       </div>
 
-      <Card className="p-6">
-        <h3 className="text-lg font-semibold">المراحل القادمة</h3>
-        <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-          <li>✅ المرحلة 1: إعداد لوحة التحكم + الحماية + نظرة عامة</li>
-          <li>⏳ المرحلة 2: إدارة الخدمات (إضافة/تعديل/حذف)</li>
-          <li>⏳ المرحلة 3: إدارة العروض</li>
-          <li>⏳ المرحلة 4: إدارة الفروع</li>
-          <li>⏳ المرحلة 5: تعديل نصوص كل الصفحات</li>
-          <li>⏳ المرحلة 6: الإعدادات العامة + مكتبة الصور</li>
-        </ul>
-      </Card>
     </div>
   );
 }
