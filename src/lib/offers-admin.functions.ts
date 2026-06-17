@@ -19,8 +19,7 @@ export const listOffersAdmin = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     await assertAdmin(context.supabase, context.userId);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await context.supabase
       .from("offers")
       .select("*")
       .order("sort_order", { ascending: true })
@@ -34,8 +33,7 @@ export const createOffer = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => OfferInput.parse(data))
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: row, error } = await supabaseAdmin
+    const { data: row, error } = await context.supabase
       .from("offers")
       .insert(data)
       .select()
@@ -51,8 +49,7 @@ export const updateOffer = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: row, error } = await supabaseAdmin
+    const { data: row, error } = await context.supabase
       .from("offers")
       .update(data.patch)
       .eq("id", data.id)
@@ -67,8 +64,7 @@ export const deleteOffer = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { error } = await supabaseAdmin.from("offers").delete().eq("id", data.id);
+    const { error } = await context.supabase.from("offers").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
   });
