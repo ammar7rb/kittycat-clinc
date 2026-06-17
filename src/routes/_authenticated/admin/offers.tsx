@@ -56,6 +56,7 @@ type Offer = {
   end_date: string | null;
   sort_order: number;
   is_active: boolean;
+  layout: "wide" | "portrait";
 };
 
 const empty = {
@@ -68,6 +69,7 @@ const empty = {
   end_date: null as string | null,
   sort_order: 0,
   is_active: true,
+  layout: "wide" as "wide" | "portrait",
 };
 
 function OffersAdminPage() {
@@ -218,6 +220,7 @@ function OffersAdminPage() {
                 end_date: editing.end_date,
                 sort_order: editing.sort_order,
                 is_active: editing.is_active,
+                layout: editing.layout ?? "wide",
               }
             : empty
         }
