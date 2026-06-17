@@ -37,7 +37,7 @@ function HomePage() {
   const { data: services } = useServices();
   const { data: offers } = useOffers();
   const { data: settings } = useSettings();
-  const featuredOffer = offers?.[0];
+  const activeOffers = offers ?? [];
   const firstWa = branches?.[0]?.whatsapp;
   const instagramUrl = settings?.instagram || "";
   const tiktokUrl = settings?.tiktok || "";
@@ -130,7 +130,7 @@ function HomePage() {
       </section>
 
       {/* ============ FEATURED OFFER — single banner ============ */}
-      {featuredOffer && (
+      {activeOffers.length > 0 && (
         <section className="relative py-16 md:py-24">
           <div className="container mx-auto px-4">
             <SectionHeading
@@ -147,8 +147,10 @@ function HomePage() {
             />
           </div>
 
-          <div className="mt-12">
-            <FeaturedOfferBanner offer={featuredOffer} whatsapp={firstWa} />
+          <div className="mt-12 space-y-12">
+            {activeOffers.map((o) => (
+              <FeaturedOfferBanner key={o.id} offer={o} whatsapp={firstWa} />
+            ))}
           </div>
         </section>
       )}

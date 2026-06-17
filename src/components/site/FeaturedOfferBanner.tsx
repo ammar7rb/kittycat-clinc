@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { MessageCircle, ShieldCheck, Instagram } from "lucide-react";
+import { ShieldCheck, Instagram } from "lucide-react";
 import { OfferRow } from "@/lib/queries";
 import { useLanguage, useLocalized } from "@/lib/i18n/LanguageProvider";
 import { useSettings } from "@/lib/queries";
@@ -46,6 +46,7 @@ export function FeaturedOfferBanner({ offer }: Props) {
   const showTimer = !!offer.end_date && !time.ended;
   const title = pick(offer, "title");
   const desc = pick(offer, "description");
+  const isPortrait = offer.layout === "portrait";
 
   const units = [
     { value: time.days, label: t("offer.days") },
@@ -54,12 +55,98 @@ export function FeaturedOfferBanner({ offer }: Props) {
     { value: time.seconds, label: t("offer.seconds"), accent: true },
   ];
 
+  if (isPortrait) {
+    return (
+      <article className="reveal reveal-up container mx-auto px-4">
+        <div className="relative mx-auto w-full max-w-md overflow-hidden rounded-[2.5rem] border-4 border-background bg-card shadow-[0_32px_64px_-16px_rgba(0,0,0,0.35)]">
+          {/* Top content */}
+          <div className="relative z-10 px-8 pt-10 pb-8 text-center">
+            <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 text-primary text-sm font-bold border border-primary/20 px-4 py-1.5">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
+              </span>
+              {t("home.offers.title")}
+            </div>
+
+            <h3 className="mt-5 text-3xl md:text-4xl font-extrabold text-foreground leading-tight">
+              {title}
+            </h3>
+
+            {desc && (
+              <p className="mt-3 text-muted-foreground text-base leading-relaxed font-medium">
+                {desc}
+              </p>
+            )}
+
+            {showTimer && (
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-2" dir="ltr">
+                {units.map((u) => (
+                  <div
+                    key={u.label}
+                    className={
+                      u.accent
+                        ? "flex flex-col items-center justify-center w-16 h-16 rounded-2xl bg-secondary text-secondary-foreground shadow-lg shadow-secondary/30"
+                        : "flex flex-col items-center justify-center w-16 h-16 rounded-2xl bg-foreground/5 backdrop-blur-md border border-foreground/10"
+                    }
+                  >
+                    <span className="text-xl font-black tabular-nums">
+                      {String(u.value).padStart(2, "0")}
+                    </span>
+                    <span className="text-[10px] font-bold uppercase tracking-tighter">
+                      {u.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className="mt-7 flex justify-center">
+              <a
+                href={bookUrl}
+                target="_blank"
+                rel="noopener"
+                className="inline-flex items-center gap-3 rounded-2xl bg-gradient-to-r from-secondary to-secondary-glow px-7 py-3.5 text-base font-black text-secondary-foreground shadow-[var(--shadow-elegant)] transition-all hover:scale-105 active:scale-95"
+              >
+                <Instagram className="h-5 w-5" />
+                {t("common.bookNow")}
+              </a>
+            </div>
+          </div>
+
+          {/* Portrait image */}
+          <div className="relative aspect-[4/5] w-full overflow-hidden bg-muted">
+            {offer.image_url ? (
+              <img
+                src={offer.image_url}
+                alt={title}
+                className="absolute inset-0 h-full w-full object-cover"
+                loading="lazy"
+              />
+            ) : (
+              <div className="absolute inset-0" style={{ background: "var(--gradient-secondary)" }} />
+            )}
+
+            {/* Floating Promo Badge */}
+            <div className={`absolute top-6 ${dir === "rtl" ? "right-6" : "left-6"}`}>
+              <div className="w-20 h-20 rounded-full bg-primary text-primary-foreground flex flex-col items-center justify-center text-center leading-none font-black shadow-2xl border-4 border-background -rotate-12">
+                <span className="text-[10px] uppercase opacity-80 tracking-widest">
+                  {t("offer.badgeTop")}
+                </span>
+                <span className="text-lg">{t("offer.badgeBottom")}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    );
+  }
+
   return (
     <article className="reveal reveal-up container mx-auto px-4">
       <div
         className="relative w-full overflow-hidden rounded-[2.5rem] border-4 border-background bg-card shadow-[0_32px_64px_-16px_rgba(0,0,0,0.35)] flex flex-col md:flex-row items-stretch min-h-[520px]"
       >
-        {/* Background decorative glows */}
         <div
           aria-hidden
           className="pointer-events-none absolute -top-[10%] -left-[5%] w-64 h-64 rounded-full blur-[100px]"
@@ -70,13 +157,7 @@ export function FeaturedOfferBanner({ offer }: Props) {
           className="pointer-events-none absolute -bottom-[10%] right-[20%] w-96 h-96 rounded-full blur-[120px]"
           style={{ background: "color-mix(in oklab, var(--secondary) 12%, transparent)" }}
         />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -bottom-[10%] right-[20%] w-96 h-96 rounded-full blur-[120px]"
-          style={{ background: "color-mix(in oklab, hsl(var(--secondary)) 12%, transparent)" }}
-        />
 
-        {/* Content Column */}
         <div className="relative z-20 flex-1 p-8 md:p-14 flex flex-col justify-center gap-7">
           <div className="space-y-4">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-bold border border-primary/20 w-fit">
@@ -98,7 +179,6 @@ export function FeaturedOfferBanner({ offer }: Props) {
             )}
           </div>
 
-          {/* Countdown */}
           {showTimer && (
             <div className="flex flex-wrap items-center gap-3" dir="ltr">
               {units.map((u) => (
@@ -133,7 +213,6 @@ export function FeaturedOfferBanner({ offer }: Props) {
             </div>
           )}
 
-          {/* CTA */}
           <div className="flex items-center gap-6 flex-wrap">
             <a
               href={bookUrl}
@@ -147,11 +226,10 @@ export function FeaturedOfferBanner({ offer }: Props) {
           </div>
         </div>
 
-        {/* Image Column */}
         <div
           className={`relative w-full md:w-[45%] overflow-hidden bg-muted ${
             dir === "rtl" ? "md:border-r md:border-l-0" : "md:border-l md:border-r-0"
-          } border-border min-h-[320px]`}
+          } border-border min-h-[320px] aspect-video md:aspect-auto`}
         >
           {offer.image_url ? (
             <img
@@ -161,16 +239,12 @@ export function FeaturedOfferBanner({ offer }: Props) {
               loading="lazy"
             />
           ) : (
-            <div
-              className="absolute inset-0"
-              style={{ background: "var(--gradient-secondary)" }}
-            />
+            <div className="absolute inset-0" style={{ background: "var(--gradient-secondary)" }} />
           )}
 
-          {/* Side fade into card */}
           <div
             aria-hidden
-            className="absolute inset-0"
+            className="absolute inset-0 hidden md:block"
             style={{
               background:
                 dir === "rtl"
@@ -178,20 +252,9 @@ export function FeaturedOfferBanner({ offer }: Props) {
                   : "linear-gradient(90deg, var(--card) 0%, color-mix(in oklab, var(--card) 40%, transparent) 30%, transparent 70%)",
             }}
           />
-          <div
-            aria-hidden
-            className="absolute inset-0 mix-blend-overlay"
-            style={{
-              background:
-                "linear-gradient(180deg, color-mix(in oklab, var(--primary) 12%, transparent), color-mix(in oklab, var(--secondary) 12%, transparent))",
-            }}
-          />
 
-          {/* Floating Promo Badge */}
           <div className={`absolute top-8 ${dir === "rtl" ? "right-8" : "left-8"}`}>
-            <div
-              className="w-24 h-24 rounded-full bg-primary text-primary-foreground flex flex-col items-center justify-center text-center leading-none font-black shadow-2xl border-4 border-background -rotate-12 transition-transform hover:rotate-0 duration-300"
-            >
+            <div className="w-24 h-24 rounded-full bg-primary text-primary-foreground flex flex-col items-center justify-center text-center leading-none font-black shadow-2xl border-4 border-background -rotate-12 transition-transform hover:rotate-0 duration-300">
               <span className="text-[10px] uppercase opacity-80 tracking-widest">
                 {t("offer.badgeTop")}
               </span>
@@ -199,7 +262,6 @@ export function FeaturedOfferBanner({ offer }: Props) {
             </div>
           </div>
 
-          {/* Floating Quality Card */}
           <div
             className={`absolute bottom-8 ${
               dir === "rtl" ? "right-8 left-8" : "left-8 right-8"
@@ -210,12 +272,8 @@ export function FeaturedOfferBanner({ offer }: Props) {
                 <ShieldCheck className="w-6 h-6 text-primary" />
               </div>
               <div>
-                <p className="text-foreground font-bold text-sm">
-                  {t("offer.trustTitle")}
-                </p>
-                <p className="text-muted-foreground text-[11px]">
-                  {t("offer.trustDesc")}
-                </p>
+                <p className="text-foreground font-bold text-sm">{t("offer.trustTitle")}</p>
+                <p className="text-muted-foreground text-[11px]">{t("offer.trustDesc")}</p>
               </div>
             </div>
           </div>
