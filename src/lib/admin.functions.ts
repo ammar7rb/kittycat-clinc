@@ -14,13 +14,13 @@ export const getAdminStats = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     await assertAdmin(context.supabase, context.userId);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const db = context.supabase;
 
     const [services, offers, branches, content] = await Promise.all([
-      supabaseAdmin.from("services").select("id, is_active", { count: "exact" }),
-      supabaseAdmin.from("offers").select("id, is_active", { count: "exact" }),
-      supabaseAdmin.from("branches").select("id", { count: "exact" }),
-      supabaseAdmin.from("website_content").select("id", { count: "exact" }),
+      db.from("services").select("id, is_active", { count: "exact" }),
+      db.from("offers").select("id, is_active", { count: "exact" }),
+      db.from("branches").select("id", { count: "exact" }),
+      db.from("website_content").select("id", { count: "exact" }),
     ]);
 
     return {
