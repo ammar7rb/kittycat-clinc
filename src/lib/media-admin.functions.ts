@@ -10,8 +10,7 @@ export const listMedia = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     await assertAdmin(context.supabase, context.userId);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await context.supabase
       .from("media")
       .select("*")
       .order("created_at", { ascending: false });
@@ -36,7 +35,6 @@ export const uploadMedia = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     // Decode base64
     const buffer = Buffer.from(data.base64, "base64");
@@ -49,7 +47,7 @@ export const uploadMedia = createServerFn({ method: "POST" })
     const safeName = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
     const storagePath = `uploads/${safeName}`;
 
-    const { error: upErr } = await supabaseAdmin.storage
+    const { error: upErr } = await context.supabase.storage
       .from("media")
       .upload(storagePath, buffer, {
         contentType: data.mime_type,
@@ -57,9 +55,9 @@ export const uploadMedia = createServerFn({ method: "POST" })
       });
     if (upErr) throw new Error(upErr.message);
 
-    const { data: pub } = supabaseAdmin.storage.from("media").getPublicUrl(storagePath);
+    const { data: pub } = context.supabase.storage.from("media").getPublicUrl(storagePath);
 
-    const { data: row, error } = await supabaseAdmin
+    const { data: row, error } = await context.supabase
       .from("media")
       .insert({
         file_name: data.file_name,
