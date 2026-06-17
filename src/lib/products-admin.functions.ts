@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { requireAdmin } from "@/integrations/supabase/require-admin";
 import { z } from "zod";
 import { assertAdmin } from "./admin.functions";
 
@@ -25,7 +25,7 @@ const ProductInput = z.object({
 });
 
 export const listProductsAdmin = createServerFn({ method: "GET" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireAdmin])
   .handler(async ({ context }) => {
     await assertAdmin(context.supabase, context.userId);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -39,7 +39,7 @@ export const listProductsAdmin = createServerFn({ method: "GET" })
   });
 
 export const createProduct = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireAdmin])
   .inputValidator((data: unknown) => ProductInput.parse(data))
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
@@ -54,7 +54,7 @@ export const createProduct = createServerFn({ method: "POST" })
   });
 
 export const updateProduct = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireAdmin])
   .inputValidator((data: unknown) =>
     z.object({ id: z.string().uuid(), patch: ProductInput.partial() }).parse(data),
   )
@@ -72,7 +72,7 @@ export const updateProduct = createServerFn({ method: "POST" })
   });
 
 export const deleteProduct = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireAdmin])
   .inputValidator((data: unknown) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
