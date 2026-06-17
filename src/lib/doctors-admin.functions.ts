@@ -18,8 +18,7 @@ export const listDoctorsAdmin = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     await assertAdmin(context.supabase, context.userId);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await context.supabase
       .from("doctors")
       .select("*")
       .order("branch_id", { ascending: true })
@@ -33,8 +32,7 @@ export const createDoctor = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => DoctorInput.parse(data))
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: row, error } = await supabaseAdmin.from("doctors").insert(data).select().single();
+    const { data: row, error } = await context.supabase.from("doctors").insert(data).select().single();
     if (error) throw new Error(error.message);
     return row;
   });
@@ -46,8 +44,7 @@ export const updateDoctor = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: row, error } = await supabaseAdmin
+    const { data: row, error } = await context.supabase
       .from("doctors")
       .update(data.patch)
       .eq("id", data.id)
@@ -62,8 +59,7 @@ export const deleteDoctor = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { error } = await supabaseAdmin.from("doctors").delete().eq("id", data.id);
+    const { error } = await context.supabase.from("doctors").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
   });
