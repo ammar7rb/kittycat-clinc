@@ -5,6 +5,7 @@ import {
   Twitter,
   Music2,
   Sparkles,
+  Ghost,
   type LucideIcon,
 } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
@@ -50,6 +51,13 @@ export function FollowUs({
       label: "Facebook",
       handle: "Kitty Cat Clinic",
       gradient: "linear-gradient(135deg, #1877f2, #0a4fbf)",
+    },
+    {
+      url: settings?.snapchat,
+      Icon: Ghost,
+      label: "Snapchat",
+      handle: "kittycat2026960",
+      gradient: "linear-gradient(135deg, #fffc00, #f7e500)",
     },
     {
       url: settings?.youtube,
