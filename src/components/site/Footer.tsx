@@ -9,6 +9,7 @@ import {
   Youtube,
   Twitter,
   Music2,
+  Ghost,
 } from "lucide-react";
 import { useLanguage, useLocalized } from "@/lib/i18n/LanguageProvider";
 import { useBranches, useSettings } from "@/lib/queries";
