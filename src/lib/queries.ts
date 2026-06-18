@@ -171,6 +171,7 @@ export type SiteSettings = {
   tiktok: string;
   youtube: string;
   twitter: string;
+  snapchat: string;
   instagram_order_url: string;
   instagram_learn_more_url: string;
 };
@@ -188,6 +189,7 @@ const SETTINGS_MAP: Record<string, { field: keyof SiteSettings; lang?: "ar" | "e
   "settings.social.tiktok": { field: "tiktok" },
   "settings.social.youtube": { field: "youtube" },
   "settings.social.twitter": { field: "twitter" },
+  "settings.social.snapchat": { field: "snapchat" },
   "settings.instagram_order_url": { field: "instagram_order_url" },
   "settings.instagram_learn_more_url": { field: "instagram_learn_more_url" },
 };
@@ -200,7 +202,7 @@ export function useSettings() {
       const empty: SiteSettings = {
         logo_url: "", favicon_url: "", phone: "", whatsapp: "", email: "",
         address_ar: "", address_en: "", working_hours_ar: "", working_hours_en: "",
-        facebook: "", instagram: "", tiktok: "", youtube: "", twitter: "",
+        facebook: "", instagram: "", tiktok: "", youtube: "", twitter: "", snapchat: "",
         instagram_order_url: "", instagram_learn_more_url: "",
       };
       const { data, error } = await supabase

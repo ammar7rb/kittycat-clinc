@@ -130,6 +130,12 @@ const SECTIONS: { title: string; items: SettingDef[] }[] = [
         placeholder: "https://tiktok.com/@...",
       },
       {
+        key: "settings.social.snapchat",
+        label: "Snapchat",
+        type: "url",
+        placeholder: "https://snapchat.com/add/...",
+      },
+      {
         key: "settings.social.youtube",
         label: "YouTube",
         type: "url",
