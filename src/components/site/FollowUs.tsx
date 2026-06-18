@@ -152,12 +152,16 @@ export function FollowUs({
       </div>
 
       <div
-        className={`relative mt-8 grid gap-4 ${
-          socials.length >= 4
-            ? "sm:grid-cols-2 lg:grid-cols-4"
-            : socials.length === 3
-              ? "sm:grid-cols-3"
-              : "sm:grid-cols-2"
+        className={`relative mt-8 grid gap-3 grid-cols-2 ${
+          socials.length >= 6
+            ? "sm:grid-cols-3 lg:grid-cols-6"
+            : socials.length === 5
+              ? "sm:grid-cols-3 lg:grid-cols-5"
+              : socials.length >= 4
+                ? "sm:grid-cols-2 lg:grid-cols-4"
+                : socials.length === 3
+                  ? "sm:grid-cols-3"
+                  : "sm:grid-cols-2"
         }`}
       >
         {socials.map(({ url, Icon, label, handle, gradient }) => (
@@ -167,7 +171,7 @@ export function FollowUs({
             target="_blank"
             rel="noopener"
             aria-label={label}
-            className={`group relative flex flex-col items-center gap-3 overflow-hidden rounded-2xl border p-6 text-center transition-all duration-500 hover:-translate-y-1.5 hover:border-transparent hover:shadow-[var(--shadow-elegant)] ${
+            className={`group relative flex flex-col items-center gap-2 overflow-hidden rounded-2xl border p-4 text-center transition-all duration-500 hover:-translate-y-1.5 hover:border-transparent hover:shadow-[var(--shadow-elegant)] ${
               filled
                 ? "border-white/15 bg-white/10 backdrop-blur-sm"
                 : "border-border bg-background"
@@ -180,10 +184,10 @@ export function FollowUs({
               style={{ background: gradient }}
             />
             <span
-              className="relative z-10 flex h-14 w-14 items-center justify-center rounded-2xl text-white shadow-lg transition-transform duration-500 group-hover:scale-110"
+              className="relative z-10 flex h-11 w-11 items-center justify-center rounded-xl text-white shadow-lg transition-transform duration-500 group-hover:scale-110"
               style={{ background: gradient }}
             >
-              <Icon className="h-7 w-7" />
+              <Icon className="h-5 w-5" />
             </span>
             <span
               className={`relative z-10 text-sm font-bold transition-colors duration-500 group-hover:text-white ${
