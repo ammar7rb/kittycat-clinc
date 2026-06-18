@@ -32,6 +32,7 @@ export function Footer() {
     { url: settings?.facebook, Icon: Facebook, label: "Facebook" },
     { url: settings?.instagram, Icon: Instagram, label: "Instagram" },
     { url: settings?.tiktok, Icon: Music2, label: "TikTok" },
+    { url: settings?.snapchat, Icon: Ghost, label: "Snapchat" },
     { url: settings?.youtube, Icon: Youtube, label: "YouTube" },
     { url: settings?.twitter, Icon: Twitter, label: "X" },
   ].filter((s) => !!s.url);
