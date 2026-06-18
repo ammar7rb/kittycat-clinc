@@ -171,6 +171,7 @@ export type SiteSettings = {
   tiktok: string;
   youtube: string;
   twitter: string;
+  snapchat: string;
   instagram_order_url: string;
   instagram_learn_more_url: string;
 };
