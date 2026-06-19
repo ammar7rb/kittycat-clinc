@@ -115,6 +115,8 @@ export const translations = {
     "wa.defaultMsg": "السلام عليكم، أود الاستفسار عن خدمات Kitty Cat Clinic",
     "wa.serviceMsg": "السلام عليكم، أود حجز موعد لخدمة:",
     "wa.offerMsg": "السلام عليكم، أود الاستفسار عن عرض:",
+    "wa.productMsg": "السلام عليكم، أود الاستفسار عن منتج:",
+    "wa.consultMsg": "السلام عليكم، أود استشارة قبل شراء منتج من المتجر",
     "wa.chooseBranchTitle": "اختر الفرع الأقرب",
 
     // Footer
@@ -231,6 +233,8 @@ export const translations = {
     "wa.defaultMsg": "Hello, I'd like to ask about Kitty Cat Clinic services",
     "wa.serviceMsg": "Hello, I'd like to book a session for:",
     "wa.offerMsg": "Hello, I'd like to ask about the offer:",
+    "wa.productMsg": "Hello, I'd like to ask about the product:",
+    "wa.consultMsg": "Hello, I'd like advice before buying a product from the store",
     "wa.chooseBranchTitle": "Choose the closest branch",
 
     "footer.quickLinks": "Quick links",
