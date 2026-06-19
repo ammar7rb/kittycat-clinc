@@ -1,13 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { ShoppingBag, Cat, Dog, PawPrint, Search } from "lucide-react";
+import { ShoppingBag, Cat, Dog, PawPrint, Search, MessageCircle } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { PageHero } from "@/components/site/PageHero";
 import { ProductCard } from "@/components/site/ProductCard";
+import { BranchWhatsAppMenu } from "@/components/site/BranchWhatsAppMenu";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { useBranches, useProducts } from "@/lib/queries";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/shop")({
   head: () => ({
@@ -134,7 +134,7 @@ function ShopPage() {
       </section>
 
       {/* CTA */}
-      {firstWa && (
+      {branches && branches.length > 0 && (
         <section
           className="relative overflow-hidden py-12"
           style={{
@@ -155,19 +155,15 @@ function ShopPage() {
                   : "Our team will help you choose the right product for your pet"}
               </p>
             </div>
-            <Button
-              asChild
-              size="lg"
-              className="bg-gradient-to-r from-secondary to-secondary-glow text-secondary-foreground shadow-[var(--shadow-elegant)] hover:opacity-95"
+            <BranchWhatsAppMenu
+              branches={branches}
+              message={t("wa.consultMsg")}
+              menuAlign="end"
+              buttonClassName="inline-flex items-center gap-2 h-11 px-6 rounded-md bg-gradient-to-r from-secondary to-secondary-glow text-secondary-foreground text-base font-semibold shadow-[var(--shadow-elegant)] hover:opacity-95 transition-opacity"
             >
-              <a
-                href={`https://wa.me/${firstWa.replace(/[^0-9]/g, "")}`}
-                target="_blank"
-                rel="noopener"
-              >
-                {t("nav.bookWhatsapp")}
-              </a>
-            </Button>
+              <MessageCircle className="h-5 w-5" />
+              {t("nav.bookWhatsapp")}
+            </BranchWhatsAppMenu>
           </div>
         </section>
       )}
