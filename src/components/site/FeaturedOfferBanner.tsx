@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { ShieldCheck, Instagram } from "lucide-react";
+import { ShieldCheck, MessageCircle } from "lucide-react";
 import { OfferRow } from "@/lib/queries";
 import { useLanguage, useLocalized } from "@/lib/i18n/LanguageProvider";
-import { useSettings } from "@/lib/queries";
+import { useBranches } from "@/lib/queries";
+import { BranchWhatsAppMenu } from "@/components/site/BranchWhatsAppMenu";
 
 type Props = {
   offer: OfferRow;
@@ -33,8 +34,8 @@ function computeTimeLeft(end: string | null): TimeLeft {
 export function FeaturedOfferBanner({ offer }: Props) {
   const pick = useLocalized();
   const { t, dir } = useLanguage();
-  const { data: settings } = useSettings();
-  const bookUrl = settings?.instagram_order_url || "https://ig.me/m/kitty.cat.clinic";
+  const { data: branches } = useBranches();
+  const offerMessage = `${t("wa.offerMsg")} ${pick(offer, "title")}`;
   const [time, setTime] = useState<TimeLeft>(() => computeTimeLeft(offer.end_date));
 
   useEffect(() => {
@@ -102,15 +103,14 @@ export function FeaturedOfferBanner({ offer }: Props) {
             )}
 
             <div className="mt-7 flex justify-center">
-              <a
-                href={bookUrl}
-                target="_blank"
-                rel="noopener"
-                className="inline-flex items-center gap-3 rounded-2xl bg-gradient-to-r from-secondary to-secondary-glow px-7 py-3.5 text-base font-black text-secondary-foreground shadow-[var(--shadow-elegant)] transition-all hover:scale-105 active:scale-95"
+              <BranchWhatsAppMenu
+                branches={branches}
+                message={offerMessage}
+                buttonClassName="inline-flex items-center gap-3 rounded-2xl bg-gradient-to-r from-secondary to-secondary-glow px-7 py-3.5 text-base font-black text-secondary-foreground shadow-[var(--shadow-elegant)] transition-all hover:scale-105 active:scale-95"
               >
-                <Instagram className="h-5 w-5" />
+                <MessageCircle className="h-5 w-5" />
                 {t("common.bookNow")}
-              </a>
+              </BranchWhatsAppMenu>
             </div>
           </div>
 
@@ -214,15 +214,15 @@ export function FeaturedOfferBanner({ offer }: Props) {
           )}
 
           <div className="flex items-center gap-6 flex-wrap">
-            <a
-              href={bookUrl}
-              target="_blank"
-              rel="noopener"
-              className="group inline-flex items-center gap-3 rounded-2xl bg-gradient-to-r from-secondary to-secondary-glow px-8 py-4 text-lg font-black text-secondary-foreground shadow-[var(--shadow-elegant)] transition-all hover:scale-105 active:scale-95"
+            <BranchWhatsAppMenu
+              branches={branches}
+              message={offerMessage}
+              menuAlign="start"
+              buttonClassName="group inline-flex items-center gap-3 rounded-2xl bg-gradient-to-r from-secondary to-secondary-glow px-8 py-4 text-lg font-black text-secondary-foreground shadow-[var(--shadow-elegant)] transition-all hover:scale-105 active:scale-95"
             >
-              <Instagram className="h-6 w-6" />
+              <MessageCircle className="h-6 w-6" />
               {t("common.bookNow")}
-            </a>
+            </BranchWhatsAppMenu>
           </div>
         </div>
 

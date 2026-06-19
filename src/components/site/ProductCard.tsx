@@ -1,8 +1,9 @@
-import { Instagram, ShoppingBag, Cat, Dog, PawPrint } from "lucide-react";
+import { MessageCircle, ShoppingBag, Cat, Dog, PawPrint } from "lucide-react";
 import type { ProductRow } from "@/lib/queries";
 import { useLanguage, useLocalized } from "@/lib/i18n/LanguageProvider";
-import { useSettings } from "@/lib/queries";
+import { useBranches } from "@/lib/queries";
 import { Button } from "@/components/ui/button";
+import { BranchWhatsAppMenu } from "@/components/site/BranchWhatsAppMenu";
 
 export function ProductCard({
   product,
@@ -12,12 +13,12 @@ export function ProductCard({
   whatsapp?: string | null;
   index?: number;
 }) {
-  const { lang } = useLanguage();
+  const { lang, t } = useLanguage();
   const pick = useLocalized();
-  const { data: settings } = useSettings();
-  const instagramUrl = settings?.instagram_order_url || settings?.instagram;
+  const { data: branches } = useBranches();
   const name = pick(product, "name");
   const desc = pick(product, "description");
+  const productMessage = `${t("wa.productMsg")} ${name}`;
   const hasDiscount =
     product.compare_at_price && product.compare_at_price > product.price;
   const discountPct = hasDiscount
@@ -121,21 +122,17 @@ export function ProductCard({
 
         {/* Actions */}
         <div className="mt-4">
-          {instagramUrl && product.stock > 0 ? (
-            <Button
-              asChild
-              size="sm"
-              className="w-full text-white hover:opacity-90"
-              style={{
-                background:
-                  "linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)",
-              }}
+          {product.stock > 0 ? (
+            <BranchWhatsAppMenu
+              branches={branches}
+              message={productMessage}
+              className="w-full"
+              buttonClassName="inline-flex w-full items-center justify-center gap-1.5 h-9 rounded-md px-3 text-sm font-medium text-white shadow hover:opacity-90 transition-opacity"
+              buttonStyle={{ background: "var(--whatsapp)" }}
             >
-              <a href={instagramUrl} target="_blank" rel="noopener">
-                <Instagram className="h-4 w-4 me-1.5" />
-                {lang === "ar" ? "اطلب الآن" : "Order now"}
-              </a>
-            </Button>
+              <MessageCircle className="h-4 w-4" />
+              {lang === "ar" ? "اطلب عبر واتساب" : "Order via WhatsApp"}
+            </BranchWhatsAppMenu>
           ) : (
             <Button size="sm" disabled className="w-full">
               {lang === "ar" ? "غير متاح" : "Unavailable"}
