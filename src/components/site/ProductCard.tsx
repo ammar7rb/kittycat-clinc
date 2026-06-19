@@ -1,8 +1,9 @@
-import { Instagram, ShoppingBag, Cat, Dog, PawPrint } from "lucide-react";
+import { MessageCircle, ShoppingBag, Cat, Dog, PawPrint } from "lucide-react";
 import type { ProductRow } from "@/lib/queries";
 import { useLanguage, useLocalized } from "@/lib/i18n/LanguageProvider";
-import { useSettings } from "@/lib/queries";
+import { useBranches } from "@/lib/queries";
 import { Button } from "@/components/ui/button";
+import { BranchWhatsAppMenu } from "@/components/site/BranchWhatsAppMenu";
 
 export function ProductCard({
   product,
@@ -12,12 +13,12 @@ export function ProductCard({
   whatsapp?: string | null;
   index?: number;
 }) {
-  const { lang } = useLanguage();
+  const { lang, t } = useLanguage();
   const pick = useLocalized();
-  const { data: settings } = useSettings();
-  const instagramUrl = settings?.instagram_order_url || settings?.instagram;
+  const { data: branches } = useBranches();
   const name = pick(product, "name");
   const desc = pick(product, "description");
+  const productMessage = `${t("wa.productMsg")} ${name}`;
   const hasDiscount =
     product.compare_at_price && product.compare_at_price > product.price;
   const discountPct = hasDiscount
