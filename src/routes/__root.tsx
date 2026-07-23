@@ -118,6 +118,16 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'AW-17885747612');`,
       },
+      {
+        src: "https://www.googletagmanager.com/gtag/js?id=AW-18267322870",
+        async: true,
+      },
+      {
+        children: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'AW-18267322870');`,
+      },
     ],
   }),
   shellComponent: RootShell,
