@@ -6,6 +6,7 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  type ErrorComponentProps,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
@@ -40,7 +41,7 @@ function NotFoundComponent() {
   );
 }
 
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function ErrorComponent({ error, reset }: ErrorComponentProps) {
   console.error(error);
   const router = useRouter();
   useEffect(() => {
@@ -116,17 +117,26 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         children: `window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
-gtag('config', 'AW-17885747612');`,
-      },
-      {
-        src: "https://www.googletagmanager.com/gtag/js?id=AW-18267322870",
-        async: true,
-      },
-      {
-        children: `window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'AW-18267322870');`,
+gtag('config', 'AW-17885747612');
+gtag('config', 'AW-18267322870');
+gtag('config', 'AW-16893530506');
+(function(){
+  if (window.__waClickTracking) return;
+  window.__waClickTracking = true;
+  var last = {};
+  document.addEventListener('click', function(e){
+    var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+    if (!a) return;
+    var href = a.getAttribute('href') || '';
+    var m = href.match(/^https?:\\/\\/(?:wa\\.me|api\\.whatsapp\\.com|wa\\.link)\\/(?:send\\?phone=)?(\\d*)/i);
+    if (!m) return;
+    var key = m[1] || href;
+    var now = Date.now();
+    if (last[key] && now - last[key] < 2000) return;
+    last[key] = now;
+    gtag('event', 'conversion', { send_to: 'AW-16893530506/yTObCOerqb8dEIqju_c-', wa_number: m[1] || '' });
+  }, true);
+})();`,
       },
     ],
   }),
